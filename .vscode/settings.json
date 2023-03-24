@@ -1,0 +1,6 @@
+{
+  "window.title": "piros photography - frontend",
+  "workbench.editor.labelFormat": "short",
+  "css.lint.unknownAtRules": "ignore",
+  "editor.codeActionsOnSave": { "source.fixAll.eslint": true }
+}
