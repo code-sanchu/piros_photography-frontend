@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 
-import PageContent from "~/components/my-pages/albums/Entry";
+import PageContent from "~/albums/Entry";
 
 export { getStaticProps } from "~/albums/staticData";
 
