@@ -20,7 +20,8 @@
     "paths": {
       "~/*": ["./src/*"],
       "~/components/*": ["./src/components/*"],
-      "~/albums/*": ["src/components/my-pages/albums/*"]
+      "~/albums/*": ["src/components/my-pages/albums/*"],
+      "~/album/*": ["src/components/my-pages/album/*"]
     }
   },
   "include": [
