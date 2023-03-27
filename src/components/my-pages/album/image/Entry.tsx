@@ -40,6 +40,8 @@ const AlbumImage = ({ albumImage }: { albumImage: Album["images"][0] }) => {
           />
         </div>
       ) : null}
+
+      <div className="fixed left-0 top-1/2 h-[1px] w-screen bg-red-900" />
     </div>
   );
 };
@@ -61,6 +63,7 @@ const OnContainerWidthReady = ({
   const [openState, setOpenState] = useState<
     "closed" | "opening" | "open" | "closing"
   >("closed");
+  const [readMore, setReadMore] = useState(false);
 
   const windowSize = useWindowSize();
 
@@ -87,24 +90,37 @@ const OnContainerWidthReady = ({
     transformElement: { x: left, y: top, ...transformedImageDimensions },
     windowSize,
   });
-  // if (albumImage.index === 2) {
-  console.log("transformedPosition:", albumImage.index, transformedPosition);
-  // }
 
-  const [springs, api] = useSpring(() => ({
+  const [imageSprings, imageApi] = useSpring<{
+    width?: number;
+    height?: number;
+    x?: number;
+    y?: number;
+  }>(() => ({
+    ...initialImageDimensions,
+    x: 0,
+    y: 0,
     config: { tension: 280, friction: 60 },
-    from: {
-      ...initialImageDimensions,
-      x: 0,
-      y: 0,
-    },
+  }));
+
+  const imageDescriptionHeight = 24;
+
+  const [readMoreSprings, readMoreApi] = useSpring(() => ({
+    height: imageDescriptionHeight,
+    x: transformedPosition.x,
+    y:
+      transformedPosition.y -
+      imageDescriptionHeight / 2 +
+      transformedImageDimensions.height,
+    config: { tension: 280, friction: 60 },
   }));
 
   function openImage() {
     setOpenState("opening");
-    api.start({
+    imageApi.start({
       ...transformedImageDimensions,
-      ...transformedPosition,
+      x: transformedPosition.x,
+      y: transformedPosition.y - imageDescriptionHeight / 2,
       onResolve() {
         setOpenState("open");
       },
@@ -113,7 +129,8 @@ const OnContainerWidthReady = ({
 
   function closeImage() {
     setOpenState("closing");
-    api.start({
+
+    imageApi.start({
       ...initialImageDimensions,
       x: 0,
       y: 0,
@@ -125,22 +142,24 @@ const OnContainerWidthReady = ({
 
   return (
     <>
-      {initialImageDimensions ? (
-        <animated.div
-          className="absolute flex h-full w-full cursor-pointer bg-yellow-100"
-          style={{
-            transformOrigin: "top",
-            zIndex:
-              isHovered ||
-              openState === "opening" ||
-              openState === "open" ||
-              openState === "closing"
-                ? 50
-                : 0,
-            ...springs,
-          }}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+      <animated.div
+        className="absolute flex h-full w-full cursor-pointer flex-col bg-yellow-100"
+        style={{
+          /*         zIndex:
+          isHovered ||
+          openState === "opening" ||
+          openState === "open" ||
+          openState === "closing"
+            ? 50
+            : 0, */
+          ...imageSprings,
+        }}
+        // onMouseEnter={() => setIsHovered(true)}
+        // onMouseLeave={() => setIsHovered(false)}
+      >
+        <div
+          className="flex flex-grow flex-col"
+          style={{ maxHeight: transformedImageDimensions.height }}
         >
           <MyCldImage
             initialDimensions={initialImageDimensions}
@@ -158,6 +177,47 @@ const OnContainerWidthReady = ({
           >
             Close
           </button>
+        </div>
+      </animated.div>
+      {openState === "open" ? (
+        <animated.div
+          className="overflow-y-hidden bg-red-50"
+          // className="absolute bottom-0 w-full translate-y-full overflow-y-hidden bg-red-50"
+          style={readMoreSprings}
+        >
+          <div className="flex">
+            <h2>Image Title</h2>
+            <button
+              className="bg-white"
+              onClick={() => {
+                if (!readMore) {
+                  setReadMore(true);
+                  imageApi.start({
+                    y:
+                      transformedPosition.y -
+                      imageDescriptionHeight / 2 -
+                      200 / 2,
+                  });
+                  readMoreApi.start({
+                    height: 200,
+                    y:
+                      transformedPosition.y -
+                      imageDescriptionHeight / 2 +
+                      transformedImageDimensions.height -
+                      200 / 2,
+                  });
+                } else {
+                  setReadMore(false);
+                  readMoreApi.start({
+                    height: imageDescriptionHeight,
+                  });
+                }
+              }}
+            >
+              Read more
+            </button>
+          </div>
+          <div className="mt-2">I am read more</div>
         </animated.div>
       ) : null}
     </>
