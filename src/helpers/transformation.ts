@@ -21,17 +21,19 @@ export const calcTransformDimensions = z
           width: z.number().gt(0).lte(1),
           height: z.number().gt(0).lte(1),
         }),
+        plusY: z.number(),
       }),
     }),
   )
-  .implement(({ transformTo: constraint, initialDimensions: image }) => {
-    const imageAspectRatio = image.width / image.height;
+  .implement(({ transformTo, initialDimensions }) => {
+    const imageAspectRatio = initialDimensions.width / initialDimensions.height;
 
-    const maxWidth = constraint.maxValue.width * constraint.maxDecimal.width;
-    const maxHeight = constraint.maxValue.height * constraint.maxDecimal.height;
+    const maxWidth = transformTo.maxValue.width * transformTo.maxDecimal.width;
+    const maxHeight =
+      transformTo.maxValue.height * transformTo.maxDecimal.height;
 
     let width = maxWidth;
-    let height = width / imageAspectRatio;
+    let height = width / imageAspectRatio + transformTo.plusY;
 
     if (height > maxHeight) {
       height = maxHeight;

@@ -1,6 +1,6 @@
 import { api } from "~/utils/api";
 import { type Album } from "./_types";
-import AlbumImage from "./image/Entry";
+import AlbumImage from "./image/Entry2";
 import { type StaticData } from "./staticData";
 
 const AlbumPage = ({ albumId }: StaticData) => {
