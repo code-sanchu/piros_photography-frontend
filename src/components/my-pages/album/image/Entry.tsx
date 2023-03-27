@@ -86,7 +86,7 @@ const OnContainerWidthReady = ({
     },
   });
 
-  const transformedPosition = calcTransformDistanceToWindowCenter({
+  const transformedImagePosition = calcTransformDistanceToWindowCenter({
     transformElement: { x: left, y: top, ...transformedImageDimensions },
     windowSize,
   });
@@ -103,15 +103,22 @@ const OnContainerWidthReady = ({
     config: { tension: 280, friction: 60 },
   }));
 
-  const imageDescriptionHeight = 24;
+  const [titleMeasurements, titleRef] = useMeasure<HTMLDivElement>();
+  const [readMoreMeasurements, readMoreRef] = useMeasure<HTMLDivElement>();
 
-  const [readMoreSprings, readMoreApi] = useSpring(() => ({
-    height: imageDescriptionHeight,
-    x: transformedPosition.x,
-    y:
-      transformedPosition.y -
-      imageDescriptionHeight / 2 +
-      transformedImageDimensions.height,
+  console.log("titleMeasurements:", titleMeasurements?.height);
+
+  const imageOpenYPosInitial =
+    transformedImagePosition.y - (titleMeasurements?.height || 1) / 2;
+
+  const imageTextPosYInitial =
+    imageOpenYPosInitial + transformedImageDimensions.height;
+
+  const [imageTextSprings, imageTextApi] = useSpring(() => ({
+    opacity: 0,
+    height: titleMeasurements?.height,
+    x: transformedImagePosition.x,
+    y: imageTextPosYInitial,
     config: { tension: 280, friction: 60 },
   }));
 
@@ -119,10 +126,13 @@ const OnContainerWidthReady = ({
     setOpenState("opening");
     imageApi.start({
       ...transformedImageDimensions,
-      x: transformedPosition.x,
-      y: transformedPosition.y - imageDescriptionHeight / 2,
+      x: transformedImagePosition.x,
+      y: imageOpenYPosInitial,
       onResolve() {
         setOpenState("open");
+        imageTextApi.start({
+          opacity: 100,
+        });
       },
     });
   }
@@ -145,17 +155,17 @@ const OnContainerWidthReady = ({
       <animated.div
         className="absolute flex h-full w-full cursor-pointer flex-col bg-yellow-100"
         style={{
-          /*         zIndex:
-          isHovered ||
-          openState === "opening" ||
-          openState === "open" ||
-          openState === "closing"
-            ? 50
-            : 0, */
+          zIndex:
+            isHovered ||
+            openState === "opening" ||
+            openState === "open" ||
+            openState === "closing"
+              ? 50
+              : 0,
           ...imageSprings,
         }}
-        // onMouseEnter={() => setIsHovered(true)}
-        // onMouseLeave={() => setIsHovered(false)}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
         <div
           className="flex flex-grow flex-col"
@@ -179,47 +189,45 @@ const OnContainerWidthReady = ({
           </button>
         </div>
       </animated.div>
-      {openState === "open" ? (
-        <animated.div
-          className="overflow-y-hidden bg-red-50"
-          // className="absolute bottom-0 w-full translate-y-full overflow-y-hidden bg-red-50"
-          style={readMoreSprings}
-        >
-          <div className="flex">
-            <h2>Image Title</h2>
-            <button
-              className="bg-white"
-              onClick={() => {
-                if (!readMore) {
-                  setReadMore(true);
-                  imageApi.start({
-                    y:
-                      transformedPosition.y -
-                      imageDescriptionHeight / 2 -
-                      200 / 2,
-                  });
-                  readMoreApi.start({
-                    height: 200,
-                    y:
-                      transformedPosition.y -
-                      imageDescriptionHeight / 2 +
-                      transformedImageDimensions.height -
-                      200 / 2,
-                  });
-                } else {
-                  setReadMore(false);
-                  readMoreApi.start({
-                    height: imageDescriptionHeight,
-                  });
-                }
-              }}
-            >
-              Read more
-            </button>
-          </div>
-          <div className="mt-2">I am read more</div>
-        </animated.div>
-      ) : null}
+      <animated.div
+        className={`overflow-y-hidden bg-red-50 ${
+          openState === "open" ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+        // className="absolute bottom-0 w-full translate-y-full overflow-y-hidden bg-red-50"
+        style={imageTextSprings}
+      >
+        <div className="flex">
+          <h2 ref={titleRef}>Image Title</h2>
+          <button
+            className="bg-white"
+            onClick={() => {
+              if (!readMore) {
+                setReadMore(true);
+                imageApi.start({
+                  y: imageOpenYPosInitial - 200 / 2,
+                });
+                imageTextApi.start({
+                  height: 200,
+                  y:
+                    imageOpenYPosInitial +
+                    transformedImageDimensions.height -
+                    200 / 2,
+                });
+              } else {
+                setReadMore(false);
+                imageTextApi.start({
+                  height: titleMeasurements?.height || 1,
+                });
+              }
+            }}
+          >
+            Read more
+          </button>
+        </div>
+        <div className="pt-2" ref={readMoreRef}>
+          I am read more
+        </div>
+      </animated.div>
     </>
   );
 };
