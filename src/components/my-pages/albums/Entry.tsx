@@ -5,7 +5,7 @@ import { useMeasure } from "react-use";
 
 import { api, type RouterOutputs } from "~/utils/api";
 import MyCldImage from "~/components/image/MyCldImage";
-import { calcImgHeightForWidth } from "~/helpers/dimensions";
+import { calcImgHeightForWidth } from "~/helpers/transformation";
 import { type MyOmit } from "~/types/utilities";
 
 type RouterAlbum = RouterOutputs["album"]["albumsPageGetAll"][0];

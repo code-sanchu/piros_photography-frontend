@@ -1,18 +1,17 @@
-import { useMeasure } from "react-use";
-
-import { api, type RouterOutputs } from "~/utils/api";
-import MyCldImage from "~/components/image/MyCldImage";
-import { calcImgHeightForWidth } from "~/helpers/dimensions";
+import { api } from "~/utils/api";
+import { type Album } from "./_types";
+import AlbumImage from "./image/Entry";
 import { type StaticData } from "./staticData";
 
-type RouterAlbum = RouterOutputs["album"]["albumPageGetOne"];
-type Album = NonNullable<RouterAlbum>;
-
 const AlbumPage = ({ albumId }: StaticData) => {
+  const { data } = api.album.albumPageGetOne.useQuery({ albumId });
+  const album = data as Album;
+
   return (
-    <div className="flex justify-center">
+    <div className="flex min-h-screen justify-center">
       <div className="w-full max-w-[1800px] p-8">
         <div>Album Page</div>
+        {JSON.stringify(album.images.map((a) => a.index))}
         <div>
           <Images albumId={albumId} />
         </div>
@@ -36,29 +35,5 @@ const Images = ({ albumId }: { albumId: string }) => {
   );
 };
 
+// ! make sure deploy to vercel working then disconnect.
 // ! next todo: open image. transform from initial position. Maybe use react-spring? Would need to load higher res image for new size.
-
-const AlbumImage = ({ albumImage }: { albumImage: Album["images"][0] }) => {
-  const [containerRef, { width: containerWidth }] =
-    useMeasure<HTMLDivElement>();
-
-  return (
-    <div className="cursor-pointer" ref={containerRef}>
-      {containerWidth ? (
-        <MyCldImage
-          dimensions={{
-            height: calcImgHeightForWidth({
-              containerWidth,
-              image: {
-                naturalHeight: albumImage.image.naturalHeight,
-                naturalWidth: albumImage.image.naturalWidth,
-              },
-            }),
-            width: containerWidth,
-          }}
-          src={albumImage.image.cloudinary_public_id}
-        />
-      ) : null}
-    </div>
-  );
-};
