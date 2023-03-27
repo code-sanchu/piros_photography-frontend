@@ -68,7 +68,7 @@ const OnContainerWidthReady = ({
   const [openState, setOpenState] = useState<
     "closed" | "opening" | "open" | "closing"
   >("closed");
-  // const [showReadMore, setShowReadMore] = useState(false);
+  const [readMoreIsShowing, setReadMoreIsShowing] = useState(false);
 
   const windowSize = useWindowSize();
 
@@ -167,8 +167,40 @@ const OnContainerWidthReady = ({
             Close
           </button>
         </div>
-        <div>
-          <h2>Image title</h2>
+        <div className="">
+          <div className="flex gap-md">
+            <h2>Image title</h2>
+            <button
+              className=""
+              onClick={() => {
+                if (!readMoreIsShowing) {
+                  const readMoreHeight = 100;
+
+                  imageApi.start({
+                    to: {
+                      height:
+                        transformedImageDimensions.height + readMoreHeight,
+                      y: transformedImagePosition.y - readMoreHeight / 2,
+                    },
+                  });
+
+                  setReadMoreIsShowing(true);
+                } else {
+                  imageApi.start({
+                    to: {
+                      height: transformedImageDimensions.height,
+                      y: transformedImagePosition.y,
+                    },
+                  });
+
+                  setReadMoreIsShowing(false);
+                }
+              }}
+            >
+              read {readMoreIsShowing ? "less" : "more"}
+            </button>
+          </div>
+          <div>I am read more</div>
         </div>
       </animated.div>
     </>
