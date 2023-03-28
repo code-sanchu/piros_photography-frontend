@@ -1,4 +1,4 @@
-import Account from "./Account";
+import Account from "./user/Entry";
 
 const Header = () => {
   return (
