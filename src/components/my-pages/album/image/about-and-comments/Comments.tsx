@@ -137,7 +137,15 @@ const CommentForm = ({
       />
       {isFocused || value.length ? (
         <div className="mt-1 flex items-center justify-between">
-          <div></div>
+          <button
+            className="rounded-md border py-1 px-2 text-xs "
+            onClick={() => {
+              //  need to unfocus
+            }}
+            type="button"
+          >
+            Cancel
+          </button>
           <button
             className="rounded-md border bg-blue-500 py-1 px-2 text-xs text-white"
             onClick={handleSubmit}
