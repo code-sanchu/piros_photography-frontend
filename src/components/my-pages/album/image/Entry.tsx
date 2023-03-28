@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
+  useClickOutside,
   useIntersectionObserver,
   useMeasure,
   useWindowSize,
@@ -17,6 +18,8 @@ import {
   useContainerMeasurementsContext,
 } from "../_context";
 import MyCldImage from "./MyCldImage";
+
+// ! change cld image size on open image. Happens automatically?
 
 const AlbumImage = () => {
   const [containerMeasurements, containerRef] = useMeasure<HTMLDivElement>();
@@ -124,28 +127,52 @@ const OnAllMeasurementsReady = ({
 
   const windowSize = useWindowSize();
 
-  const initialImageDimensions = useInitialDimensions();
   const containerMeasurements = useContainerMeasurementsContext();
+  const initialImageDimensions = useInitialDimensions();
 
-  // const imageTitleHeight = 24;
+  const transformedImageDimensionsInitial = useRef(
+    calcTransformDimensions({
+      initialDimensions: initialImageDimensions,
+      transformTo: {
+        maxDecimal: { height: 0.7, width: 0.8 },
+        maxValue: { height: windowSize.height, width: windowSize.width },
+        plusY: titleHeight + (readMoreIsShowing ? readMoreHeight : 0),
+      },
+    }),
+  ).current;
 
-  const transformedImageDimensions = calcTransformDimensions({
-    initialDimensions: initialImageDimensions,
-    transformTo: {
-      maxDecimal: { height: 0.7, width: 0.8 },
-      maxValue: { height: windowSize.height, width: windowSize.width },
-      plusY: titleHeight,
-    },
-  });
+  const transformedImagePositionInitial = useRef(
+    calcTransformDistanceToWindowCenter({
+      transformElement: {
+        x: containerMeasurements.pos.x,
+        y: containerMeasurements.pos.y,
+        ...transformedImageDimensionsInitial,
+      },
+      windowSize,
+    }),
+  ).current;
 
-  const transformedImagePosition = calcTransformDistanceToWindowCenter({
-    transformElement: {
-      x: containerMeasurements.pos.x,
-      y: containerMeasurements.pos.y,
-      ...transformedImageDimensions,
-    },
-    windowSize,
-  });
+  const transformedImageDimensionsReadMoreOpen = useRef(
+    calcTransformDimensions({
+      initialDimensions: initialImageDimensions,
+      transformTo: {
+        maxDecimal: { height: 0.7, width: 0.8 },
+        maxValue: { height: windowSize.height, width: windowSize.width },
+        plusY: titleHeight + readMoreHeight,
+      },
+    }),
+  ).current;
+
+  const transformedImagePositionReadMoreOpen = useRef(
+    calcTransformDistanceToWindowCenter({
+      transformElement: {
+        x: containerMeasurements.pos.x,
+        y: containerMeasurements.pos.y,
+        ...transformedImageDimensionsReadMoreOpen,
+      },
+      windowSize,
+    }),
+  ).current;
 
   const [imageSprings, imageApi] = useSpring(() => ({
     ...initialImageDimensions,
@@ -156,9 +183,17 @@ const OnAllMeasurementsReady = ({
 
   function openImage() {
     setOpenState("opening");
+
+    const dimensions = !readMoreIsShowing
+      ? transformedImageDimensionsInitial
+      : transformedImageDimensionsReadMoreOpen;
+    const position = !readMoreIsShowing
+      ? transformedImagePositionInitial
+      : transformedImagePositionReadMoreOpen;
+
     imageApi.start({
-      ...transformedImageDimensions,
-      ...transformedImagePosition,
+      ...dimensions,
+      ...position,
       onResolve() {
         setOpenState("open");
       },
@@ -178,14 +213,32 @@ const OnAllMeasurementsReady = ({
     });
   }
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useClickOutside(containerRef, () => {
+    if (openState === "closed" || openState === "closing") {
+      return;
+    }
+    closeImage();
+  });
+
   return (
     <animated.div
-      className="absolute h-full w-full cursor-pointer overflow-y-hidden"
+      className={`absolute h-full w-full overflow-y-hidden ${
+        openState === "closed" ? "cursor-pointer" : ""
+      }`}
       style={{
         ...imageSprings,
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={() => {
+        if (openState === "open" || openState === "opening") {
+          return;
+        }
+        openImage();
+      }}
+      ref={containerRef}
     >
       <div
         className={`flex w-full flex-col`}
@@ -201,23 +254,10 @@ const OnAllMeasurementsReady = ({
             albumImage.image.naturalWidth / albumImage.image.naturalHeight,
         }}
       >
-        {/* <div className="flex flex-grow flex-col"> */}
         <MyCldImage
           initialDimensions={initialImageDimensions}
           src={albumImage.image.cloudinary_public_id}
         />
-        <button
-          className="absolute top-0 left-0 z-10 bg-white"
-          onClick={openImage}
-        >
-          Open
-        </button>
-        <button
-          className="absolute top-0 right-0 z-10 bg-white"
-          onClick={closeImage}
-        >
-          Close
-        </button>
       </div>
       <div className="">
         <div className="flex gap-md">
@@ -228,8 +268,9 @@ const OnAllMeasurementsReady = ({
               if (!readMoreIsShowing) {
                 imageApi.start({
                   to: {
-                    height: transformedImageDimensions.height + readMoreHeight,
-                    y: transformedImagePosition.y - readMoreHeight / 2,
+                    height:
+                      transformedImageDimensionsInitial.height + readMoreHeight,
+                    y: transformedImagePositionInitial.y - readMoreHeight / 2,
                   },
                 });
 
@@ -237,8 +278,8 @@ const OnAllMeasurementsReady = ({
               } else {
                 imageApi.start({
                   to: {
-                    height: transformedImageDimensions.height,
-                    y: transformedImagePosition.y,
+                    height: transformedImageDimensionsInitial.height,
+                    y: transformedImagePositionInitial.y,
                   },
                 });
 
@@ -270,7 +311,7 @@ const ReadMore = () => {
   } */
 
   return (
-    <div className="max-h-[200px] overflow-y-auto">
+    <div className="max-h-[200px] overflow-y-auto font-serif">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin at nunc
       iaculis, iaculis nisi id, finibus metus. Cras auctor convallis tincidunt.
       In fringilla fermentum condimentum. Proin eleifend, odio at blandit
