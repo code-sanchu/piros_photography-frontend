@@ -1,4 +1,5 @@
 import { api } from "~/utils/api";
+import Header from "~/components/header/Entry";
 import { AlbumImageProvider, AlbumProvider, useAlbumContext } from "./_context";
 import { type Album } from "./_types";
 import AlbumImage from "./image/Entry";
@@ -9,16 +10,19 @@ const AlbumPage = ({ albumId }: StaticData) => {
   const album = data as Album;
 
   return (
-    <AlbumProvider album={album}>
-      <div className="flex min-h-screen justify-center">
-        <div className="w-full max-w-[1800px] p-8">
-          <div>Album Page</div>
-          <div>
-            <Images />
+    <div>
+      <Header />
+      <AlbumProvider album={album}>
+        <div className="flex min-h-screen justify-center">
+          <div className="w-full max-w-[1800px] p-8">
+            <div>Album Page</div>
+            <div>
+              <Images />
+            </div>
           </div>
         </div>
-      </div>
-    </AlbumProvider>
+      </AlbumProvider>
+    </div>
   );
 };
 
@@ -31,7 +35,7 @@ const Images = () => {
     <div className="grid grid-cols-2 gap-md">
       {album.images.map((albumImage) => (
         <AlbumImageProvider albumImage={albumImage} key={albumImage.id}>
-          <AlbumImage albumImage={albumImage} />
+          <AlbumImage />
         </AlbumImageProvider>
       ))}
     </div>
