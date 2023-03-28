@@ -21,7 +21,7 @@ export const calcTransformDimensions = z
           width: z.number().gt(0).lte(1),
           height: z.number().gt(0).lte(1),
         }),
-        plusY: z.number(),
+        plusY: z.optional(z.number()),
       }),
     }),
   )
@@ -33,7 +33,7 @@ export const calcTransformDimensions = z
       transformTo.maxValue.height * transformTo.maxDecimal.height;
 
     let width = maxWidth;
-    let height = width / imageAspectRatio + transformTo.plusY;
+    let height = width / imageAspectRatio + (transformTo?.plusY || 0);
 
     if (height > maxHeight) {
       height = maxHeight;

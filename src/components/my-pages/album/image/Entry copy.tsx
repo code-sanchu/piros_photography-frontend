@@ -19,8 +19,13 @@ import {
 import MyCldImage from "./MyCldImage";
 
 const AlbumImage = () => {
+  const albumImage = useAlbumImageContext();
+
   const [containerMeasurements, containerRef] = useMeasure<HTMLDivElement>();
   const containerIntersection = useIntersectionObserver(containerRef);
+
+  const [titleMeasurements, titleRef] = useMeasure<HTMLDivElement>();
+  const [readMoreMeasurements, readMoreRef] = useMeasure<HTMLDivElement>();
 
   return (
     <div className="relative" ref={containerRef}>
@@ -32,7 +37,27 @@ const AlbumImage = () => {
           }}
           width={containerMeasurements.width}
         >
-          <OnContainerMeasurementsReady />
+          <div
+            style={{
+              height: calcImgHeightForWidth({
+                containerWidth: containerMeasurements.width,
+                image: {
+                  naturalHeight: albumImage.image.naturalHeight,
+                  naturalWidth: albumImage.image.naturalWidth,
+                },
+              }),
+            }}
+          >
+            <OnContainerMeasurementsReady
+              containerMeasurements={{
+                pos: {
+                  x: containerIntersection.boundingClientRect.x,
+                  y: containerIntersection.boundingClientRect.y,
+                },
+                width: containerMeasurements.width,
+              }}
+            />
+          </div>
         </ContainerMeasurementsProvider>
       ) : null}
     </div>
@@ -41,9 +66,18 @@ const AlbumImage = () => {
 
 export default AlbumImage;
 
-const useInitialDimensions = () => {
+const useInitialDimensions = ({
+  containerMeasurements,
+}: {
+  containerMeasurements: {
+    width: number;
+    pos: {
+      x: number;
+      y: number;
+    };
+  };
+}) => {
   const albumImage = useAlbumImageContext();
-  const containerMeasurements = useContainerMeasurementsContext();
 
   const initialImageDimensions = {
     width: containerMeasurements.width,
@@ -59,12 +93,46 @@ const useInitialDimensions = () => {
   return initialImageDimensions;
 };
 
-const OnContainerMeasurementsReady = () => {
+const useTransformDimensions = () => {
+  const windowSize = useWindowSize();
+
+  const transformedImageDimensions = calcTransformDimensions({
+    initialDimensions: initialImageDimensions,
+    transformTo: {
+      maxDecimal: { height: 0.7, width: 0.8 },
+      maxValue: { height: windowSize.height, width: windowSize.width },
+      plusY: imageTitleHeight,
+    },
+  });
+
+  return;
+};
+
+const OnContainerMeasurementsReady = ({
+  containerMeasurements,
+}: {
+  containerMeasurements: {
+    width: number;
+    pos: {
+      x: number;
+      y: number;
+    };
+  };
+}) => {
   const albumImage = useAlbumImageContext();
-  const containerMeasurements = useContainerMeasurementsContext();
-  const initialImageDimensions = useInitialDimensions();
 
   const windowSize = useWindowSize();
+
+  const initialImageDimensions = {
+    width: containerMeasurements.width,
+    height: calcImgHeightForWidth({
+      containerWidth: containerMeasurements.width,
+      image: {
+        naturalHeight: albumImage.image.naturalHeight,
+        naturalWidth: albumImage.image.naturalWidth,
+      },
+    }),
+  };
 
   const transformWidth = calcTransformDimensions({
     initialDimensions: initialImageDimensions,
@@ -74,45 +142,19 @@ const OnContainerMeasurementsReady = () => {
     },
   }).width;
 
-  const [titleMeasurements, titleRef] = useMeasure<HTMLDivElement>();
-  const [readMoreMeasurements, readMoreRef] = useMeasure<HTMLDivElement>();
-
-  return (
-    <div
-      style={{
-        height: calcImgHeightForWidth({
-          containerWidth: containerMeasurements.width,
-          image: {
-            naturalHeight: albumImage.image.naturalHeight,
-            naturalWidth: albumImage.image.naturalWidth,
-          },
-        }),
-      }}
-    >
-      <div className="invisible fixed" style={{ width: transformWidth }}>
-        <div ref={titleRef}>
-          <Title />
-        </div>
-        <div ref={readMoreRef}>
-          <ReadMore />
-        </div>
-      </div>
-      {titleMeasurements && readMoreMeasurements ? (
-        <OnAllMeasurementsReady
-          titleHeight={titleMeasurements.height}
-          readMoreHeight={readMoreMeasurements.height}
-        />
-      ) : null}
-    </div>
-  );
+  return <div></div>;
 };
 
-const OnAllMeasurementsReady = ({
-  titleHeight,
-  readMoreHeight,
+const OnImageMeasurementsReady = ({
+  containerMeasurements,
 }: {
-  titleHeight: number;
-  readMoreHeight: number;
+  containerMeasurements: {
+    width: number;
+    pos: {
+      x: number;
+      y: number;
+    };
+  };
 }) => {
   const albumImage = useAlbumImageContext();
 
@@ -124,17 +166,25 @@ const OnAllMeasurementsReady = ({
 
   const windowSize = useWindowSize();
 
-  const initialImageDimensions = useInitialDimensions();
-  const containerMeasurements = useContainerMeasurementsContext();
+  const initialImageDimensions = {
+    width: containerMeasurements.width,
+    height: calcImgHeightForWidth({
+      containerWidth: containerMeasurements.width,
+      image: {
+        naturalHeight: albumImage.image.naturalHeight,
+        naturalWidth: albumImage.image.naturalWidth,
+      },
+    }),
+  };
 
-  // const imageTitleHeight = 24;
+  const imageTitleHeight = 24;
 
   const transformedImageDimensions = calcTransformDimensions({
     initialDimensions: initialImageDimensions,
     transformTo: {
       maxDecimal: { height: 0.7, width: 0.8 },
       maxValue: { height: windowSize.height, width: windowSize.width },
-      plusY: titleHeight,
+      plusY: imageTitleHeight,
     },
   });
 
@@ -226,6 +276,8 @@ const OnAllMeasurementsReady = ({
             className=""
             onClick={() => {
               if (!readMoreIsShowing) {
+                const readMoreHeight = 100;
+
                 imageApi.start({
                   to: {
                     height: transformedImageDimensions.height + readMoreHeight,
@@ -270,7 +322,7 @@ const ReadMore = () => {
   } */
 
   return (
-    <div className="max-h-[200px] overflow-y-auto">
+    <div>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin at nunc
       iaculis, iaculis nisi id, finibus metus. Cras auctor convallis tincidunt.
       In fringilla fermentum condimentum. Proin eleifend, odio at blandit
@@ -278,14 +330,7 @@ const ReadMore = () => {
       dolor. Suspendisse ac neque nisi. Sed aliquet eget ipsum quis suscipit.
       Praesent imperdiet nunc ac nisi molestie tincidunt. Morbi consectetur
       accumsan erat eget tristique. In blandit vehicula mi, et placerat eros
-      ullamcorper condimentum. Lorem ipsum dolor sit amet, consectetur
-      adipiscing elit. Proin at nunc iaculis, iaculis nisi id, finibus metus.
-      Cras auctor convallis tincidunt. In fringilla fermentum condimentum. Proin
-      eleifend, odio at blandit dictum, velit lectus ultrices justo, in
-      scelerisque mauris elit quis dolor. Suspendisse ac neque nisi. Sed aliquet
-      eget ipsum quis suscipit. Praesent imperdiet nunc ac nisi molestie
-      tincidunt. Morbi consectetur accumsan erat eget tristique. In blandit
-      vehicula mi, et placerat eros ullamcorper condimentum.
+      ullamcorper condimentum.
     </div>
   );
 };
