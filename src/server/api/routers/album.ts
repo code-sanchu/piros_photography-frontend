@@ -29,7 +29,13 @@ export const albumRouter = createTRPCRouter({
           id: input.albumId,
         },
         include: {
-          images: { include: { image: true }, orderBy: { index: "asc" } },
+          images: {
+            include: {
+              image: true,
+              comments: { orderBy: { createdAt: "desc" } },
+            },
+            orderBy: { index: "asc" },
+          },
         },
       });
     }),

@@ -33,15 +33,30 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  DELETED_BY_USER
+  BANNED_BY_MODERATOR
+}
+
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  role          Role      @default(USER)
-  accounts      Account[]
-  sessions      Session[]
+  id                 String              @id @default(cuid())
+  name               String?
+  email              String?             @unique
+  emailVerified      DateTime?
+  image              String?
+  role               Role                @default(USER)
+  accounts           Account[]
+  sessions           Session[]
+  status             UserStatus          @default(ACTIVE)
+  albumImageComments AlbumImageComment[]
+  banReason          String?
+  banDate            DateTime?
 }
 
 model Admin {
@@ -73,16 +88,42 @@ model Album {
 }
 
 model AlbumImage {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String              @id @default(cuid())
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
   title       String?
   description String?
   imageId     String
   albumId     String
   index       Int
-  album       Album    @relation(fields: [albumId], references: [id])
-  image       Image    @relation(fields: [imageId], references: [id])
+  album       Album               @relation(fields: [albumId], references: [id])
+  image       Image               @relation(fields: [imageId], references: [id])
+  comments    AlbumImageComment[]
+}
+
+enum AlbumImageCommentStatusTypes {
+  ACTIVE
+  DELETED_BY_USER
+  BLOCKED_BY_MODERATOR
+}
+
+model AlbumImageCommentStatus {
+  id          String                       @id @default(cuid())
+  createdAt   DateTime                     @default(now())
+  updatedAt   DateTime                     @updatedAt
+  status      AlbumImageCommentStatusTypes @default(ACTIVE)
+  blockReason String?
+}
+
+model AlbumImageComment {
+  id           String     @id @default(cuid())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  text         String
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String
+  albumImage   AlbumImage @relation(fields: [albumImageId], references: [id])
+  albumImageId String
 }
 
 model ImageTag {
@@ -120,9 +161,4 @@ model AboutPage {
   body      String
 
   @@map("AboutText")
-}
-
-enum Role {
-  USER
-  ADMIN
 }

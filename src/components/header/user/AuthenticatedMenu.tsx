@@ -29,7 +29,7 @@ const AuthenticatedMenu = () => {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items
-            className={`absolute right-0 z-50 w-[350px] origin-top-right rounded-md bg-white shadow-lg  focus:outline-none`}
+            className={`absolute right-0 z-50 w-[350px] origin-top-right rounded-lg bg-white shadow-lg  focus:outline-none`}
           >
             <PanelContent />
           </Menu.Items>

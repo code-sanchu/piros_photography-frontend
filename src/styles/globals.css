@@ -2,13 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @layer utilities {
-  .my-abs-center {
-    @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
-  }
-
-  .my-screen-center {
-    @apply fixed inset-0 grid place-items-center;
+@layer base {
+  button,
+  input,
+  textarea {
+    @apply outline-none focus:outline-none;
   }
 }
- */
