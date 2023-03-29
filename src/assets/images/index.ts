@@ -1,5 +1,10 @@
+import erith_blur_mid from "./erith-blurred-mid.jpg";
+import erith_blur_min from "./erith-blurred-min.jpg";
 import erith from "./erith.jpg";
 
 export const localImage = {
-  home: erith,
+  erith: {
+    full: erith,
+    blur: { min: erith_blur_min, mid: erith_blur_mid },
+  },
 };

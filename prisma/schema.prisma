@@ -83,7 +83,7 @@ model Album {
   published    Boolean      @default(false)
   coverImageId String?
   description  String?
-  coverImage   Image?       @relation(fields: [coverImageId], references: [id])
+  coverImage   Image?       @relation(fields: [coverImageId], references: [id], onDelete: Cascade)
   images       AlbumImage[]
 }
 
@@ -96,8 +96,8 @@ model AlbumImage {
   imageId     String
   albumId     String
   index       Int
-  album       Album               @relation(fields: [albumId], references: [id])
-  image       Image               @relation(fields: [imageId], references: [id])
+  album       Album               @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  image       Image               @relation(fields: [imageId], references: [id], onDelete: Cascade)
   comments    AlbumImageComment[]
 }
 
@@ -120,9 +120,9 @@ model AlbumImageComment {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   text         String
-  user         User       @relation(fields: [userId], references: [id])
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String
-  albumImage   AlbumImage @relation(fields: [albumImageId], references: [id])
+  albumImage   AlbumImage @relation(fields: [albumImageId], references: [id], onDelete: Cascade)
   albumImageId String
 }
 
