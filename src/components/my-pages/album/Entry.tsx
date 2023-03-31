@@ -6,7 +6,10 @@ import AlbumImage from "./image/Entry";
 import { type StaticData } from "./staticData";
 
 const AlbumPage = ({ albumId }: StaticData) => {
-  const { data } = api.album.albumPageGetOne.useQuery({ albumId });
+  const { data } = api.album.albumPageGetOne.useQuery(
+    { albumId },
+    { enabled: false },
+  );
   const album = data as Album;
 
   return (
@@ -15,8 +18,8 @@ const AlbumPage = ({ albumId }: StaticData) => {
       <AlbumProvider album={album}>
         <div className="flex min-h-screen justify-center">
           <div className="w-full max-w-[1800px] p-8">
-            <div>Album Page</div>
-            <div>
+            <h1 className="text-3xl">{album.title}</h1>
+            <div className="mt-12">
               <Images />
             </div>
           </div>
@@ -32,8 +35,8 @@ const Images = () => {
   const album = useAlbumContext();
 
   return (
-    <div className="grid grid-cols-2 gap-md">
-      {album.images.map((albumImage) => (
+    <div className="grid grid-cols-2 gap-12">
+      {album.images.slice(0, 5).map((albumImage) => (
         <AlbumImageProvider albumImage={albumImage} key={albumImage.id}>
           <AlbumImage />
         </AlbumImageProvider>

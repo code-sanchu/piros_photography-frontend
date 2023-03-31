@@ -162,3 +162,11 @@ model AboutPage {
 
   @@map("AboutText")
 }
+
+model AlbumsPage {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  subTitle  String?
+}

@@ -6,7 +6,6 @@ import AuthenticatedMenu from "./AuthenticatedMenu";
 
 const Account = () => {
   const session = useSession();
-  console.log("session:", session);
 
   return session.status === "loading" ? <div>Loading...</div> : <OnLoad />;
 };

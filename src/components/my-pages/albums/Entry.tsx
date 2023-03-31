@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
+import { type ReactElement } from "react";
 import Link from "next/link";
 import { useMeasure } from "react-use";
 
 import { api, type RouterOutputs } from "~/utils/api";
+import Header from "~/components/header/Entry";
 import MyCldImage from "~/components/image/MyCldImage";
 import { calcImgHeightForWidth } from "~/helpers/transformation";
 import { type MyOmit } from "~/types/utilities";
@@ -16,21 +18,50 @@ type Album = MyOmit<RouterAlbum, "coverImage"> & {
 
 const AlbumsPage = () => {
   return (
-    <div className="flex justify-center">
-      <div className="w-full max-w-[1800px] p-8">
-        <h1 className="text-4xl">Albums</h1>
-        <div className="mt-xl">
-          <Albums />
-        </div>
+    <Layout>
+      <div className="mt-xl">
+        <Titles />
       </div>
-    </div>
+      <div className="mt-2xl">
+        <Albums />
+      </div>
+    </Layout>
   );
 };
 
 export default AlbumsPage;
 
+const Layout = ({ children }: { children: ReactElement | ReactElement[] }) => {
+  return (
+    <div className="min-h-screen overflow-x-hidden">
+      <Header />
+      <div className="flex justify-center">
+        <div className="w-full max-w-[1800px] p-8">{children}</div>
+      </div>
+    </div>
+  );
+};
+
+const Titles = () => {
+  const { data } = api.albumsPage.getText.useQuery(undefined, {
+    enabled: false,
+  });
+  const pageText = data as NonNullable<typeof data>;
+
+  return (
+    <div>
+      <h1 className="text-6xl">{pageText.title}</h1>
+      {pageText.subTitle?.length ? (
+        <h3 className="text-6xl">{pageText.subTitle}</h3>
+      ) : null}
+    </div>
+  );
+};
+
 const Albums = () => {
-  const { data } = api.album.albumsPageGetAll.useQuery();
+  const { data } = api.album.albumsPageGetAll.useQuery(undefined, {
+    enabled: false,
+  });
   const albums = data as unknown as Album[];
 
   return (

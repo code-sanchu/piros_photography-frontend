@@ -32,7 +32,12 @@ export const albumRouter = createTRPCRouter({
           images: {
             include: {
               image: true,
-              comments: { orderBy: { createdAt: "desc" } },
+              comments: {
+                orderBy: { createdAt: "desc" },
+                include: {
+                  user: true,
+                },
+              },
             },
             orderBy: { index: "asc" },
           },

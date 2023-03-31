@@ -3,6 +3,7 @@ import NextImage from "next/image";
 import { Menu, Transition } from "@headlessui/react";
 import { signOut, useSession } from "next-auth/react";
 
+import WithTooltip from "~/components/WithTooltip";
 import {
   SignOutIcon,
   UserCommentIcon,
@@ -43,9 +44,11 @@ export default AuthenticatedMenu;
 
 const ButtonContent = () => {
   return (
-    <div>
-      <UserImage sideSize={30} />
-    </div>
+    <WithTooltip text="my account">
+      <div className="rounded-full border-4 border-transparent p-0.5 transition-colors duration-100 ease-in-out hover:border-4 hover:border-gray-100">
+        <UserImage sideSize={30} />
+      </div>
+    </WithTooltip>
   );
 };
 
@@ -54,6 +57,7 @@ const UserImage = ({ sideSize }: { sideSize: number }) => {
 
   return session.data?.user.image ? (
     <NextImage
+      className="rounded-full"
       alt=""
       src={session.data.user.image}
       width={sideSize}

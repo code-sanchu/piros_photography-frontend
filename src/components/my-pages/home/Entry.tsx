@@ -58,7 +58,7 @@ const MainImage = () => {
           <SpinnerIcon />
         </div>
         <NextImage
-          className={`absolute left-0 top-0 h-full w-full ${
+          className={`absolute left-0 top-0 h-full w-full object-cover ${
             qualityImgIsLoaded || midBlurImgIsLoaded
               ? "opacity-0"
               : "opacity-100"
@@ -70,7 +70,7 @@ const MainImage = () => {
           onLoad={() => setMinBlurImgIsLoaded(true)}
         />
         <NextImage
-          className={`absolute left-0 top-0 h-full w-full ${
+          className={`absolute left-0 top-0 h-full w-full object-cover ${
             qualityImgIsLoaded || !midBlurImgIsLoaded
               ? "opacity-0"
               : "opacity-100"
@@ -82,7 +82,7 @@ const MainImage = () => {
           onLoad={() => setMidBlurImgIsLoaded(true)}
         />
         <NextImage
-          className={`absolute left-0 top-0 h-full w-full ${
+          className={`absolute left-0 top-0 h-full w-full object-cover ${
             !qualityImgIsLoaded ? "opacity-0" : "opacity-100"
           }`}
           loading="eager"

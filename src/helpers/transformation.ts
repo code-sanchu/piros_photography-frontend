@@ -10,7 +10,7 @@ export function calcImgHeightForWidth({
   return containerWidth / (image.naturalWidth / image.naturalHeight);
 }
 
-export const calcTransformDimensions = z
+export const calcDimensions = z
   .function()
   .args(
     z.object({
@@ -47,7 +47,7 @@ export const calcTransformDistanceToWindowCenter = z
   .function()
   .args(
     z.object({
-      transformElement: z.object({
+      measurements: z.object({
         x: z.number(),
         y: z.number(),
         width: z.number(),
@@ -56,7 +56,7 @@ export const calcTransformDistanceToWindowCenter = z
       windowSize: z.object({ width: z.number(), height: z.number() }),
     }),
   )
-  .implement(({ transformElement, windowSize }) => {
+  .implement(({ measurements: transformElement, windowSize }) => {
     const distance = {
       // x: windowSize.width / 2 - transformElement.width / 2 - transformElement.x,
       /*       y:
