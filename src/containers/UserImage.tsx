@@ -1,27 +1,30 @@
 import NextImage from "next/image";
-import { useSession } from "next-auth/react";
 
 import { UserIcon } from "~/components/icon";
 
-export const UserImage = ({ sideSize }: { sideSize: number }) => {
-  const session = useSession();
-
+export const UserImage = ({
+  sideSize,
+  src,
+}: {
+  sideSize: number;
+  src: string | undefined | null;
+}) => {
   return (
     <div>
-      {session.data?.user.image ? (
+      {src ? (
         <NextImage
           className="rounded-full"
           alt=""
-          src={session.data.user.image}
+          src={src}
           width={sideSize}
           height={sideSize}
         />
       ) : (
         <div
-          className="rounded-full"
+          className="rounded-full text-gray-400"
           style={{ width: sideSize, height: sideSize }}
         >
-          <UserIcon />
+          <UserIcon width={sideSize} height={sideSize} />
         </div>
       )}
     </div>

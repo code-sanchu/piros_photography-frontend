@@ -36,5 +36,5 @@ const useThisContext = () => {
 
 export {
   Provider as AlbumImageCommentProvider,
-  useThisContext as useAlbumImageCommentState,
+  useThisContext as useAlbumImageComment,
 };

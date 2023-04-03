@@ -26,7 +26,7 @@ const config = {
             {},
         },
         ".my-btn": {
-          "@apply rounded-md text-sm border py-1 px-[0.75rem] text-sm capitalize transition-colors duration-75 ease-in-out":
+          "@apply rounded-md border py-1 px-[0.75rem] text-sm capitalize transition-colors duration-75 ease-in-out":
             {},
         },
         ".my-btn-neutral": {

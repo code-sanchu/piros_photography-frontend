@@ -1,14 +1,17 @@
 import {
   ChatText,
   Check,
+  DotsThreeVertical,
   Gear,
   Info,
+  PencilSimple,
   SignOut,
   Spinner,
+  Trash,
   UserCircle,
   Warning,
   WarningCircle,
-} from "phosphor-react";
+} from "@phosphor-icons/react";
 
 export {
   Spinner as SpinnerIcon,
@@ -20,4 +23,7 @@ export {
   WarningCircle as ErrorIcon,
   Check as SuccessIcon,
   Info as InfoIcon,
+  DotsThreeVertical as UserMenuIcon,
+  PencilSimple as EditIcon,
+  Trash as DeleteIcon,
 };
