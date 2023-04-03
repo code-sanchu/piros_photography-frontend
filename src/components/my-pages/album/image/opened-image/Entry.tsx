@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { useAlbumImageContext } from "../../_context";
 import Image from "./Image";
+import Likes from "./Likes";
 import CommentFormAndComments from "./comment-form-and-comments/Entry";
 
 const OpenedImage = ({
@@ -44,14 +45,17 @@ const TopBar = ({
   toggleReadMoreIsOpen: () => void;
 }) => {
   return (
-    <div className="flex items-center gap-8">
-      <Title />
-      <div
-        className="cursor-pointer text-sm text-gray-600"
-        onClick={toggleReadMoreIsOpen}
-      >
-        read {readMoreIsOpen ? "less" : "more"}
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-8">
+        <Title />
+        <div
+          className="cursor-pointer text-sm text-gray-600"
+          onClick={toggleReadMoreIsOpen}
+        >
+          read {readMoreIsOpen ? "less" : "more"}
+        </div>
       </div>
+      <Likes />
     </div>
   );
 };

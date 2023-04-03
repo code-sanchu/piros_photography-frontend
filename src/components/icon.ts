@@ -3,6 +3,7 @@ import {
   Check,
   DotsThreeVertical,
   Gear,
+  HandsClapping,
   Info,
   PencilSimple,
   SignOut,
@@ -28,4 +29,5 @@ export {
   PencilSimple as EditIcon,
   Trash as DeleteIcon,
   UserCircleGear as AdminIcon,
+  HandsClapping as LikeIcon,
 };

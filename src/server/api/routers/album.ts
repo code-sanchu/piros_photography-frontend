@@ -38,6 +38,11 @@ export const albumRouter = createTRPCRouter({
                   user: true,
                 },
               },
+              likes: {
+                include: {
+                  user: true,
+                },
+              },
             },
             orderBy: { index: "asc" },
           },

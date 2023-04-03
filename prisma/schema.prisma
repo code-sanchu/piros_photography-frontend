@@ -55,6 +55,7 @@ model User {
   sessions           Session[]
   status             UserStatus          @default(ACTIVE)
   albumImageComments AlbumImageComment[]
+  albumImageLike     AlbumImageLike[]
   banReason          String?
   banDate            DateTime?
 }
@@ -99,6 +100,7 @@ model AlbumImage {
   album       Album               @relation(fields: [albumId], references: [id], onDelete: Cascade)
   image       Image               @relation(fields: [imageId], references: [id], onDelete: Cascade)
   comments    AlbumImageComment[]
+  likes       AlbumImageLike[]
 }
 
 enum AlbumImageCommentStatusTypes {
@@ -120,6 +122,16 @@ model AlbumImageComment {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   text         String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  albumImage   AlbumImage @relation(fields: [albumImageId], references: [id], onDelete: Cascade)
+  albumImageId String
+}
+
+model AlbumImageLike {
+  id           String     @id @default(cuid())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String
   albumImage   AlbumImage @relation(fields: [albumImageId], references: [id], onDelete: Cascade)
