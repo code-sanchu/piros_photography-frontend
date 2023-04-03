@@ -22,7 +22,6 @@ import useDeleteComment from "../../_hooks/useDeleteComment";
 import useUpdateComment from "../../_hooks/useUpdateComment";
 
 // □ would i be able to edit user comment without check in `UserCommentMenu`? Need supabase rls (row level security)?
-// □ admin abilities
 
 const Comment = () => {
   const comment = useAlbumImageComment();
