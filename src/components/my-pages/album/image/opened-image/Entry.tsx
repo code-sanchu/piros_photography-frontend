@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { useAlbumImageContext } from "../../_context";
 import Image from "./Image";
-import Comments from "./comments/Entry";
+import CommentFormAndComments from "./comment-form-and-comments/Entry";
 
 const OpenedImage = ({
   unopenedDimensions,
@@ -70,7 +70,7 @@ const ReadMore = () => {
   return (
     <div className="">
       <Description />
-      <Comments />
+      <CommentFormAndComments />
     </div>
   );
 };

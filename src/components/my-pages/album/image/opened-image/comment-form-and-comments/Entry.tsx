@@ -19,19 +19,28 @@ import {
 import { timeAgo } from "~/helpers/time-ago";
 import { useIsChange } from "~/hooks";
 import CommentForm from "./CommentForm";
+import { useCreateComment } from "./_hooks";
 
-const Comments = () => {
+const CommentFormAndComments = () => {
   return (
     <div className="mt-8 border-t border-gray-200">
-      <AddCommentForm />
-      <UserComments />
+      <HandleCommentFormForUserStatus>
+        <CreateCommentForm />
+      </HandleCommentFormForUserStatus>
+      <Comments />
     </div>
   );
 };
 
-export default Comments;
+export default CommentFormAndComments;
 
-const AddCommentForm = () => {
+// ! sign in link below
+
+const HandleCommentFormForUserStatus = ({
+  children: commentForm,
+}: {
+  children: ReactElement;
+}) => {
   const session = useSession();
 
   return (
@@ -41,7 +50,7 @@ const AddCommentForm = () => {
       ) : session.status === "unauthenticated" ? (
         <p>Sign in to comment</p>
       ) : (
-        <CreateCommentForm />
+        commentForm
       )}
     </div>
   );
@@ -50,7 +59,8 @@ const AddCommentForm = () => {
 const CreateCommentForm = () => {
   const albumImage = useAlbumImageContext();
 
-  const createCommentMutation = api.albumImageComment.create.useMutation();
+  // const createCommentMutation = api.albumImageComment.create.useMutation();
+  const createComment = useCreateComment();
 
   const session = useSession();
 
@@ -61,7 +71,7 @@ const CreateCommentForm = () => {
         if (!value.length) {
           return;
         }
-        createCommentMutation.mutate(
+        createComment(
           {
             data: {
               albumImageId: albumImage.id,
@@ -82,115 +92,7 @@ const CreateCommentForm = () => {
   );
 };
 
-const User = () => {
-  const session = useSession();
-  const sessionData = session.data as NonNullable<(typeof session)["data"]>;
-
-  return (
-    <div className="flex items-center gap-6">
-      <div className="flex-shrink-0">
-        <UserImage sideSize={30} />
-      </div>
-      <div>
-        {sessionData.user.name ? <h3>{sessionData.user.name}</h3> : null}
-      </div>
-    </div>
-  );
-};
-
-const UserImage = ({ sideSize }: { sideSize: number }) => {
-  const session = useSession();
-
-  return session.data?.user.image ? (
-    <NextImage
-      className="rounded-full"
-      alt=""
-      src={session.data.user.image}
-      width={sideSize}
-      height={sideSize}
-    />
-  ) : (
-    <div className="rounded-full" style={{ width: sideSize, height: sideSize }}>
-      <UserIcon />
-    </div>
-  );
-};
-
-const CommentForm2 = ({
-  isFocused,
-  setIsFocused,
-  setValue,
-  value,
-}: {
-  isFocused: boolean;
-  setIsFocused: (isFocused: boolean) => void;
-  value: string;
-  setValue: (value: string) => void;
-}) => {
-  const albumImage = useAlbumImageContext();
-
-  const createCommentMutation = api.albumImageComment.create.useMutation({
-    onSuccess() {
-      setValue("");
-    },
-  });
-
-  const session = useSession();
-
-  const handleSubmit = () => {
-    if (!value.length) {
-      return;
-    }
-    createCommentMutation.mutate({
-      data: {
-        albumImageId: albumImage.id,
-        text: value,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        userId: session.data!.user.id,
-      },
-    });
-  };
-
-  return (
-    <div className={`${isFocused || value.length ? "" : ""}`}>
-      <ReactTextareaAutosize
-        className="w-full resize-none bg-transparent text-sm text-gray-900 placeholder:text-gray-800"
-        maxRows={4}
-        value={value}
-        onChange={(event) => setValue(event.target.value)}
-        onSubmit={handleSubmit}
-        placeholder="Share your thoughts..."
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        onKeyPress={(e) => {
-          if (e.key === "Enter") e.preventDefault();
-        }}
-      />
-      {isFocused || value.length ? (
-        <div className="mt-4 flex items-center justify-between">
-          <button
-            className="rounded-md border py-1 px-2 text-xs "
-            onClick={() => {
-              setValue("");
-            }}
-            type="button"
-          >
-            Cancel
-          </button>
-          <button
-            className="rounded-md border bg-blue-500 py-1 px-2 text-xs text-white"
-            onClick={handleSubmit}
-            type="button"
-          >
-            Add Comment
-          </button>
-        </div>
-      ) : null}
-    </div>
-  );
-};
-
-const UserComments = () => {
+const Comments = () => {
   const albumImage = useAlbumImageContext();
 
   if (!albumImage.comments.length) {

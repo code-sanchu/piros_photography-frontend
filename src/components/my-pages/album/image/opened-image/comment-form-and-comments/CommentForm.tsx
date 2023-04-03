@@ -3,13 +3,20 @@ import TextareaAutosize from "react-textarea-autosize";
 
 import { UserImage } from "~/containers";
 
+export type OnSubmit = (arg0: {
+  value: string;
+  resetValue: () => void;
+}) => void;
+
+// ! *td: add mutation feedback
+
 const CommentForm = ({
   initialValue = "",
   onSubmit,
   placeholder,
 }: {
   initialValue: string | undefined;
-  onSubmit: (arg0: { value: string; resetValue: () => void }) => void;
+  onSubmit: OnSubmit;
   placeholder: string;
 }) => {
   const [value, setValue] = useState(initialValue);
@@ -24,12 +31,6 @@ const CommentForm = ({
           maxRows={4}
           value={value}
           onChange={(event) => setValue(event.target.value)}
-          onSubmit={(e) => {
-            onSubmit({
-              value: e.currentTarget.value,
-              resetValue: () => setValue(""),
-            });
-          }}
           placeholder={placeholder}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
@@ -42,6 +43,12 @@ const CommentForm = ({
             </button>
             <button
               className="rounded-lg bg-blue-600 text-white my-btn hover:bg-blue-800"
+              onClick={() =>
+                onSubmit({
+                  value,
+                  resetValue: () => setValue(""),
+                })
+              }
               type="button"
             >
               Comment
