@@ -9,6 +9,7 @@ import {
   Spinner,
   Trash,
   UserCircle,
+  UserCircleGear,
   Warning,
   WarningCircle,
 } from "@phosphor-icons/react";
@@ -26,4 +27,5 @@ export {
   DotsThreeVertical as UserMenuIcon,
   PencilSimple as EditIcon,
   Trash as DeleteIcon,
+  UserCircleGear as AdminIcon,
 };

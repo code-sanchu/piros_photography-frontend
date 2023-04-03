@@ -1,26 +1,27 @@
-import { Fragment, useRef, useState, type ReactElement } from "react";
-import { Menu, Transition } from "@headlessui/react";
+import { useRef, useState, type ReactElement } from "react";
+import { Menu } from "@headlessui/react";
 import { useClickOutside } from "@react-hookz/web";
-import produce from "immer";
+import DOMPurify from "dompurify";
 import { useSession } from "next-auth/react";
 import TextareaAutosize from "react-textarea-autosize";
-import { toast } from "react-toastify";
 
-import { api } from "~/utils/api";
-import Toast from "~/components/Toast";
-import { DeleteIcon, EditIcon, UserMenuIcon } from "~/components/icon";
-import { Modal } from "~/components/modal";
+import MyMenu from "~/components/MyMenu";
+import WithTooltip from "~/components/WithTooltip";
 import {
-  useAlbumContext,
-  useAlbumImageComment,
-  useAlbumImageContext,
-} from "~/album/_context";
+  AdminIcon,
+  DeleteIcon,
+  EditIcon,
+  UserMenuIcon,
+} from "~/components/icon";
+import { Modal } from "~/components/modal";
+import { useAlbumImageComment } from "~/album/_context";
 import { UserImage } from "~/containers";
 import { timeAgo } from "~/helpers/time-ago";
 import { useIsChange } from "~/hooks";
 import useDeleteComment from "../../_hooks/useDeleteComment";
+import useUpdateComment from "../../_hooks/useUpdateComment";
 
-// □ would i be able to edit user comment without check in `UserCommentMenu`?
+// □ would i be able to edit user comment without check in `UserCommentMenu`? Need supabase rls (row level security)?
 // □ admin abilities
 
 const Comment = () => {
@@ -39,17 +40,17 @@ const RightSide = () => {
 
   return (
     <div className="w-full">
-      <TopBar isEditing={isEditing} setIsEditing={setIsEditing} />
+      <TopBar setIsEditing={setIsEditing} />
       <CommentText isEditing={isEditing} setIsEditing={setIsEditing} />
     </div>
   );
 };
 
 const TopBar = ({
-  isEditing,
+  // isEditing,
   setIsEditing,
 }: {
-  isEditing: boolean;
+  // isEditing: boolean;
   setIsEditing: (isEditing: boolean) => void;
 }) => {
   const comment = useAlbumImageComment();
@@ -62,7 +63,10 @@ const TopBar = ({
         ) : null}
         <p className="text-xs text-gray-400">{timeAgo(comment.createdAt)}</p>
       </div>
-      <UserCommentMenu setIsEditing={setIsEditing} />
+      <div className="flex items-center gap-4">
+        <UserCommentMenu setIsEditing={setIsEditing} />
+        <AdminMenu />
+      </div>
     </div>
   );
 };
@@ -89,6 +93,8 @@ const CommentText = ({
   );
 };
 
+// ! form is unmounted when unfocused. If not unmounted, need to reset values below.
+
 const UpdateCommentForm = ({
   isEditing,
   setIsEditing,
@@ -96,106 +102,81 @@ const UpdateCommentForm = ({
   isEditing: boolean;
   setIsEditing: (isEditing: boolean) => void;
 }) => {
-  // const session = useSession();
-  const album = useAlbumContext();
-  const albumImage = useAlbumImageContext();
   const comment = useAlbumImageComment();
 
   const [value, setValue] = useState(comment.text);
 
-  const { isChange, resetIsChange } = useIsChange({ value });
+  const { isChange } = useIsChange({ value });
 
-  const apiUtils = api.useContext();
-
-  const updateTextMutation = api.albumImageComment.update.useMutation({
-    async onMutate(mutationInput) {
-      resetIsChange();
-
-      const prevData = apiUtils.album.albumPageGetOne.getData();
-
-      await apiUtils.album.albumPageGetOne.cancel();
-
-      apiUtils.album.albumPageGetOne.setData(
-        { albumId: album.id },
-        (currData) => {
-          if (!currData) {
-            return prevData;
-          }
-
-          const updatedData = produce(currData, (draft) => {
-            const imageIndex = draft.images.findIndex(
-              (draftImage) => draftImage.id === albumImage.id,
-            );
-            const draftImage = draft.images[imageIndex];
-
-            if (!draftImage) {
-              return;
-            }
-
-            const commentIndex = draftImage.comments.findIndex(
-              (draftComment) => draftComment.id === comment.id,
-            );
-            const draftComment = draftImage.comments[commentIndex];
-
-            if (!draftComment) {
-              return;
-            }
-
-            draftComment.text = mutationInput.data.text;
-          });
-
-          return updatedData;
-        },
-      );
-    },
-    onSuccess() {
-      toast(<Toast text="Comment updated" type="success" />);
-    },
-    onError: () => {
-      toast(<Toast text="Error updating comment" type="error" />);
-    },
-  });
-
-  const ref = useRef<HTMLTextAreaElement | null>(null);
-
-  useClickOutside(ref, () => {
-    if (isEditing) {
+  const updateComment = useUpdateComment({
+    onMutate() {
       setIsEditing(false);
-    }
+    },
   });
 
   const handleSubmit = () => {
-    if (!isChange) {
+    if (!isChange || !value.length) {
       return;
     }
 
-    updateTextMutation.mutate({
-      data: { text: value },
+    const cleanInput = DOMPurify.sanitize(value);
+
+    updateComment({
+      data: { text: cleanInput },
       where: { commentId: comment.id },
     });
   };
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useClickOutside(containerRef, () => {
+    if (isEditing && !isChange) {
+      setIsEditing(false);
+    }
+  });
+
   return (
-    <div className="relative">
+    <div className="w-full" ref={containerRef}>
       <TextareaAutosize
-        className="w-full resize-none bg-transparent text-sm text-gray-900 placeholder:text-gray-800"
-        maxRows={4}
+        className={`w-full resize-none border-b bg-transparent pb-2 font-serif  text-gray-900 transition-all duration-100 ease-in-out focus-within:border-b-gray-500 `}
+        maxRows={2}
         value={value}
         onChange={(event) => setValue(event.target.value)}
-        onSubmit={() => {
-          handleSubmit();
+        placeholder=""
+        onFocus={(e) => {
+          e.currentTarget.setSelectionRange(
+            e.currentTarget.value.length,
+            e.currentTarget.value.length,
+          );
+          setIsEditing(true);
         }}
-        placeholder="Update comment..."
-        onKeyPress={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-
+        onKeyDown={(e) => {
+          if (e.key == "Enter" && (e.ctrlKey || e.metaKey)) {
             handleSubmit();
           }
         }}
         autoFocus
-        ref={ref}
       />
+      {isEditing || isChange ? (
+        <div className="mt-2 flex items-center justify-between">
+          <button
+            className="rounded-lg my-btn my-btn-neutral"
+            onClick={() => {
+              setIsEditing(false);
+            }}
+            type="button"
+          >
+            Cancel
+          </button>
+          <button
+            className="rounded-lg bg-blue-600 text-white my-btn hover:bg-blue-800"
+            onClick={() => handleSubmit()}
+            type="button"
+          >
+            Comment
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -218,22 +199,14 @@ const UserCommentMenu = ({
 
   return (
     <div className="relative">
-      <Menu>
-        <Menu.Button className="text-2xl text-gray-300 hover:!text-gray-700 group-hover/comment:text-gray-500">
-          <UserMenuIcon weight="bold" />
-        </Menu.Button>
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items
-            className={`absolute right-0 z-50 flex origin-top-right flex-col gap-4 rounded-lg bg-white py-6 px-2 shadow-lg focus:outline-none`}
-          >
+      <MyMenu
+        button={
+          <div className="text-2xl text-gray-300 hover:!text-gray-700 group-hover/comment:text-gray-500">
+            <UserMenuIcon weight="bold" />
+          </div>
+        }
+        items={
+          <div className="flex flex-col gap-4 rounded-lg py-6 px-2">
             <Menu.Item>
               <div
                 className="flex cursor-pointer items-center gap-5 rounded-md px-6 py-2 hover:bg-gray-200"
@@ -260,9 +233,12 @@ const UserCommentMenu = ({
                 )}
               />
             </Menu.Item>
-          </Menu.Items>
-        </Transition>
-      </Menu>
+          </div>
+        }
+        styles={{
+          panel: "right-0 origin-top-right",
+        }}
+      />
     </div>
   );
 };
@@ -284,6 +260,98 @@ const UserDeleteCommentModal = ({
           <h4>Delete comment</h4>
           <p className="mt-4 text-sm text-gray-400">
             Delete your comment permanently?
+          </p>
+          <div className="mt-8 flex  items-center justify-between">
+            <button
+              className="my-btn my-btn-neutral"
+              type="button"
+              onClick={closeModal}
+            >
+              Cancel
+            </button>
+            <button
+              className="my-btn my-btn-action"
+              onClick={() => {
+                deleteComment(
+                  { where: { commentId: comment.id } },
+                  {
+                    onSuccess() {
+                      closeModal();
+                    },
+                  },
+                );
+              }}
+              type="button"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      )}
+    />
+  );
+};
+
+const AdminMenu = () => {
+  const session = useSession();
+
+  if (session.data?.user.role !== "ADMIN") {
+    return null;
+  }
+  return (
+    <div className="relative">
+      <MyMenu
+        button={
+          <WithTooltip text="admin menu">
+            <div className="text-xl text-gray-300 hover:!text-gray-700 group-hover/comment:text-gray-500">
+              <AdminIcon />
+            </div>
+          </WithTooltip>
+        }
+        items={
+          <div className="flex flex-col gap-4 rounded-lg py-6 px-2">
+            <Menu.Item>
+              <AdminDeleteCommentModal
+                button={({ openModal }) => (
+                  <div
+                    className="group/item flex cursor-pointer items-center gap-5 rounded-md px-6 py-2 hover:bg-gray-200"
+                    onClick={openModal}
+                  >
+                    <span className="text-lg text-gray-700 transition-colors duration-75 ease-in-out group-hover/item:text-my-alert-content">
+                      <DeleteIcon />
+                    </span>
+                    <p className="text-sm text-gray-700">Delete Comment</p>
+                  </div>
+                )}
+              />
+            </Menu.Item>
+          </div>
+        }
+        styles={{
+          panel: "right-0 origin-top-right",
+        }}
+      />
+    </div>
+  );
+};
+
+const AdminDeleteCommentModal = ({
+  button,
+}: {
+  button: (arg0: { openModal: () => void }) => ReactElement;
+}) => {
+  const comment = useAlbumImageComment();
+
+  const deleteComment = useDeleteComment();
+
+  return (
+    <Modal
+      button={button}
+      panelContent={({ closeModal }) => (
+        <div className="min-w-[350px] max-w-xl rounded-lg border bg-white p-4 shadow-lg">
+          <h4>Delete comment</h4>
+          <p className="mt-4 text-sm text-gray-400">
+            Use admin privileges to delete comment?
           </p>
           <div className="mt-8 flex  items-center justify-between">
             <button

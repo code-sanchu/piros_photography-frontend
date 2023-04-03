@@ -17,8 +17,6 @@ export const useCreateComment = () => {
 
   const createCommentMutation = api.albumImageComment.create.useMutation({
     async onSuccess() {
-      console.log("SUCCESS");
-
       await refetchAlbum();
 
       toast(<Toast text="Comment added" type="success" />);
