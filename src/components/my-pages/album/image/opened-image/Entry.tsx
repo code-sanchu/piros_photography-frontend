@@ -7,6 +7,9 @@ import Image from "./Image";
 import Likes from "./Likes";
 import CommentFormAndComments from "./comment-form-and-comments/Entry";
 
+// ! td: prev/next img; lazy load read more content
+// ! td: could have 'respond' button to show comments
+
 const OpenedImage = ({
   unopenedDimensions,
 }: {
