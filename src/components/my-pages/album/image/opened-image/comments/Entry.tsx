@@ -18,10 +18,11 @@ import {
 } from "~/album/_context";
 import { timeAgo } from "~/helpers/time-ago";
 import { useIsChange } from "~/hooks";
+import CommentForm from "./CommentForm";
 
 const Comments = () => {
   return (
-    <div className="mt-4 border-t border-gray-400">
+    <div className="mt-8 border-t border-gray-200">
       <AddCommentForm />
       <UserComments />
     </div>
@@ -34,36 +35,50 @@ const AddCommentForm = () => {
   const session = useSession();
 
   return (
-    <div className="mt-4">
+    <div className="mt-8">
       {session.status === "loading" ? (
         <p>Loading authentication status...</p>
       ) : session.status === "unauthenticated" ? (
         <p>Sign in to comment</p>
       ) : (
-        <WriteComment />
+        <CreateCommentForm />
       )}
     </div>
   );
 };
 
-const WriteComment = () => {
-  const [value, setValue] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
+const CreateCommentForm = () => {
+  const albumImage = useAlbumImageContext();
+
+  const createCommentMutation = api.albumImageComment.create.useMutation();
+
+  const session = useSession();
 
   return (
-    <div
-      className={`flex flex-col gap-6 ${
-        value.length || isFocused ? "rounded-lg p-4 shadow-md" : ""
-      }`}
-    >
-      {isFocused || value.length ? <User /> : null}
-      <CommentForm
-        setIsFocused={setIsFocused}
-        isFocused={isFocused}
-        setValue={setValue}
-        value={value}
-      />
-    </div>
+    <CommentForm
+      initialValue={undefined}
+      onSubmit={({ resetValue, value }) => {
+        if (!value.length) {
+          return;
+        }
+        createCommentMutation.mutate(
+          {
+            data: {
+              albumImageId: albumImage.id,
+              text: value,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              userId: session.data!.user.id,
+            },
+          },
+          {
+            onSuccess() {
+              resetValue();
+            },
+          },
+        );
+      }}
+      placeholder="Add a comment..."
+    />
   );
 };
 
@@ -101,7 +116,7 @@ const UserImage = ({ sideSize }: { sideSize: number }) => {
   );
 };
 
-const CommentForm = ({
+const CommentForm2 = ({
   isFocused,
   setIsFocused,
   setValue,

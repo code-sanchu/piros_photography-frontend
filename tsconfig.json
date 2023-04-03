@@ -20,6 +20,7 @@
     "paths": {
       "~/*": ["./src/*"],
       "~/components/*": ["./src/components/*"],
+      "~/containers/*": ["./src/containers/*"],
       "~/albums/*": ["src/components/my-pages/albums/*"],
       "~/album/*": ["src/components/my-pages/album/*"]
     }
