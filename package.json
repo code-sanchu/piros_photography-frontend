@@ -20,6 +20,7 @@
     "@trpc/next": "^10.9.0",
     "@trpc/react-query": "^10.9.0",
     "@trpc/server": "^10.9.0",
+    "immer": "^9.0.21",
     "javascript-time-ago": "^2.5.9",
     "next": "^13.2.1",
     "next-auth": "^4.19.0",
@@ -29,6 +30,7 @@
     "react-dom": "18.2.0",
     "react-popper-tooltip": "^4.4.2",
     "react-textarea-autosize": "^8.4.1",
+    "react-toastify": "^9.1.1",
     "react-use": "^17.4.0",
     "superjson": "1.9.1",
     "zod": "^3.20.6"

@@ -9,17 +9,24 @@ export const Modal = ({
   styles,
 }: {
   button: (arg0: { openModal: () => void }) => ReactElement;
-  panelContent: ReactElement;
-  // panelContent: (arg0: { close: () => void }) => ReactElement;
+  panelContent:
+    | ReactElement
+    | ((arg0: { closeModal: () => void }) => ReactElement);
   styles?: { parentPanel?: string };
 }) => {
   return (
     <ModalVisibilityProvider>
-      {({ open: openModal, close, isOpen }) => (
+      {({ open: openModal, close: closeModal, isOpen }) => (
         <>
           {button({ openModal })}
-          <ModalPanelWrapper isOpen={isOpen} closeModal={close} styles={styles}>
-            {panelContent}
+          <ModalPanelWrapper
+            isOpen={isOpen}
+            closeModal={closeModal}
+            styles={styles}
+          >
+            {typeof panelContent === "function"
+              ? panelContent({ closeModal })
+              : panelContent}
           </ModalPanelWrapper>
         </>
       )}
