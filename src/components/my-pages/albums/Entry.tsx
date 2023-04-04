@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { type ReactElement } from "react";
+import { Fragment, type ReactElement } from "react";
 import Link from "next/link";
 import { useMeasure } from "react-use";
 
@@ -19,10 +19,10 @@ type Album = MyOmit<RouterAlbum, "coverImage"> & {
 const AlbumsPage = () => {
   return (
     <Layout>
-      <div className="mt-xl">
+      <div className="mt-8">
         <Titles />
       </div>
-      <div className="mt-2xl">
+      <div className="mt-12">
         <Albums />
       </div>
     </Layout>
@@ -50,9 +50,9 @@ const Titles = () => {
 
   return (
     <div>
-      <h1 className="text-6xl">{pageText.title}</h1>
+      <h1 className="text-7xl">{pageText.title}</h1>
       {pageText.subTitle?.length ? (
-        <h3 className="text-6xl">{pageText.subTitle}</h3>
+        <h3 className="text-4xl">{pageText.subTitle}</h3>
       ) : null}
     </div>
   );
@@ -65,7 +65,7 @@ const Albums = () => {
   const albums = data as unknown as Album[];
 
   return (
-    <div className="grid grid-cols-2 gap-lg">
+    <div className="grid grid-cols-2 gap-8">
       {albums.map((album) => (
         <Album album={album} key={album.id}></Album>
       ))}
@@ -79,27 +79,35 @@ const Album = ({ album }: { album: Album }) => {
 
   return (
     <Link href={`/albums/${album.id}`} passHref>
-      <div ref={containerRef}>
-        {containerWidth ? (
-          <>
-            <div>{album.title}</div>
-            <div className="mt-xs">
-              <MyCldImage
-                dimensions={{
-                  height: calcImgHeightForWidth({
-                    containerWidth,
-                    image: {
-                      naturalHeight: album.coverImage.naturalHeight,
-                      naturalWidth: album.coverImage.naturalWidth,
-                    },
-                  }),
-                  width: containerWidth,
-                }}
-                src={album.coverImage.cloudinary_public_id}
-              />
-            </div>
-          </>
-        ) : null}
+      <div className="group/album" ref={containerRef}>
+        {containerWidth
+          ? [0].map((_, i) => {
+              const height = calcImgHeightForWidth({
+                containerWidth,
+                image: {
+                  naturalHeight: album.coverImage.naturalHeight,
+                  naturalWidth: album.coverImage.naturalWidth,
+                },
+              });
+
+              return (
+                <Fragment key={i}>
+                  <div className="text-lg text-gray-700 transition-colors duration-75 ease-in-out group-hover/album:text-gray-900">
+                    {album.title}
+                  </div>
+                  <div className="mt-1" style={{ height }}>
+                    <MyCldImage
+                      dimensions={{
+                        height,
+                        width: containerWidth,
+                      }}
+                      src={album.coverImage.cloudinary_public_id}
+                    />
+                  </div>
+                </Fragment>
+              );
+            })
+          : null}
       </div>
     </Link>
   );

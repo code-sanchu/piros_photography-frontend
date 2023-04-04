@@ -14,8 +14,11 @@ const MyCldImage = ({
   const [qualityImgIsLoaded, setQualityImgIsLoaded] = useState(false);
 
   return (
-    <div className="grid flex-grow place-items-center">
-      <div className="relative bg-gray-50">
+    <div
+      className="relative grid flex-grow place-items-center"
+      style={{ ...dimensions }}
+    >
+      <div className=" bg-gray-50">
         <div
           className={`transition-opacity my-abs-center ${
             !blurImgIsLoaded && !qualityImgIsLoaded

@@ -34,8 +34,8 @@ const PageContent = () => {
         <MainTitle />
         <div className="mt-2 flex items-center justify-end gap-6">
           <PageLink href="/albums" text="Albums" />
-          <PageLink href="" text="Videos" />
-          <PageLink href="" text="About" />
+          <PageLink href="/videos" text="Videos" />
+          <PageLink href="/about" text="About" />
         </div>
       </div>
     </div>
