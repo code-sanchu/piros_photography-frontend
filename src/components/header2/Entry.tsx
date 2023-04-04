@@ -4,7 +4,7 @@ import { animated, useSpring, type SpringValue } from "@react-spring/web";
 
 import UserMenu from "./user/Entry";
 
-const Header = () => {
+const Header = ({ color = "black" }: { color?: "black" | "white" }) => {
   const [panelSprings, panelSpringApi] = useSpring(() => ({
     config: { tension: 280, friction: 60 },
     from: {
@@ -12,21 +12,35 @@ const Header = () => {
     },
   }));
 
+  const [logoSprings, logoSpringsApi] = useSpring(() => ({
+    config: { tension: 280, friction: 60 },
+    from: {
+      color: color === "black" ? "black" : "white",
+    },
+  }));
+
   return (
     <>
       <div className="fixed left-0 top-0 z-40 flex w-full items-center justify-between p-4">
-        <Logo />
+        <Logo color={color} logoSprings={logoSprings} />
         <RightSide
-          closePanelAnimation={() =>
+          color={color}
+          closePanelAnimation={() => {
             panelSpringApi.start({
               translateX: "100%",
-            })
-          }
-          startPanelAnimation={() =>
+            });
+            logoSpringsApi.start({
+              color: color === "black" ? "black" : "white",
+            });
+          }}
+          startPanelAnimation={() => {
             panelSpringApi.start({
               translateX: "0%",
-            })
-          }
+            });
+            logoSpringsApi.start({
+              color: "black",
+            });
+          }}
         />
       </div>
       <MenuPanel panelSprings={panelSprings} />
@@ -36,14 +50,25 @@ const Header = () => {
 
 export default Header;
 
-const Logo = () => {
+const Logo = ({
+  color,
+  logoSprings,
+}: {
+  color: "black" | "white";
+  logoSprings: Record<string, SpringValue<string>>;
+}) => {
   return (
     <Link href="/" passHref>
-      <h2 className="uppercase tracking-widest">
+      <animated.div
+        className={`uppercase tracking-widest ${
+          color === "white" ? "text-white" : "text-black"
+        }`}
+        style={{ ...logoSprings }}
+      >
         <span className="text-xl">P</span>iros
         <br />
         <span className="text-xl">P</span>hotography
-      </h2>
+      </animated.div>
     </Link>
   );
 };
@@ -51,9 +76,11 @@ const Logo = () => {
 const RightSide = ({
   closePanelAnimation,
   startPanelAnimation,
+  color,
 }: {
   startPanelAnimation: () => void;
   closePanelAnimation: () => void;
+  color: "black" | "white";
 }) => {
   return (
     <div className="flex items-center gap-8">
@@ -61,6 +88,7 @@ const RightSide = ({
         <UserMenu />
       </div>
       <SiteMenu
+        color={color}
         closePanelAnimation={closePanelAnimation}
         startPanelAnimation={startPanelAnimation}
       />
@@ -71,9 +99,11 @@ const RightSide = ({
 const SiteMenu = ({
   closePanelAnimation,
   startPanelAnimation,
+  color,
 }: {
   startPanelAnimation: () => void;
   closePanelAnimation: () => void;
+  color: "black" | "white";
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -82,6 +112,7 @@ const SiteMenu = ({
     from: {
       rotate: 0,
       translateY: 0,
+      backgroundColor: color,
     },
   }));
   const [buttonMidBarSprings, buttonMidBarSpringApi] = useSpring(() => ({
@@ -95,6 +126,7 @@ const SiteMenu = ({
     from: {
       rotate: 0,
       translateY: 0,
+      backgroundColor: color,
     },
   }));
 
@@ -103,6 +135,7 @@ const SiteMenu = ({
     buttonTopBarSpringApi.start({
       rotate: 45,
       translateY: 8,
+      backgroundColor: "black",
     });
     buttonMidBarSpringApi.start({
       opacity: 0,
@@ -110,6 +143,7 @@ const SiteMenu = ({
     buttonBottomBarSpringApi.start({
       rotate: -45,
       translateY: -8,
+      backgroundColor: "black",
     });
     setIsOpen(true);
   };
@@ -119,6 +153,7 @@ const SiteMenu = ({
     buttonTopBarSpringApi.start({
       rotate: 0,
       translateY: 0,
+      backgroundColor: color,
     });
     buttonMidBarSpringApi.start({
       opacity: 1,
@@ -126,6 +161,7 @@ const SiteMenu = ({
     buttonBottomBarSpringApi.start({
       rotate: 0,
       translateY: 0,
+      backgroundColor: color,
     });
     setIsOpen(false);
   };
@@ -143,11 +179,13 @@ const SiteMenu = ({
         }}
       >
         <animated.div
-          className="h-[2px] w-[26px] bg-black"
+          className="h-[2px] w-[26px]"
           style={{ ...buttonTopBarSprings }}
         />
         <animated.div
-          className="h-[2px] w-[26px] bg-black"
+          className={`h-[2px] w-[26px] ${
+            color === "white" ? "bg-white" : "bg-black"
+          }`}
           style={{ ...buttonMidBarSprings }}
         />
         <animated.div

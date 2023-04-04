@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMeasure } from "react-use";
 
 import { api, type RouterOutputs } from "~/utils/api";
-import Header from "~/components/header/Entry";
+import Header from "~/components/header2/Entry";
 import MyCldImage from "~/components/image/MyCldImage";
 import { calcImgHeightForWidth } from "~/helpers/transformation";
 import { type MyOmit } from "~/types/utilities";
@@ -35,7 +35,7 @@ const Layout = ({ children }: { children: ReactElement | ReactElement[] }) => {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Header />
-      <div className="flex justify-center">
+      <div className="mt-16 flex justify-center">
         <div className="w-full max-w-[1800px] p-8">{children}</div>
       </div>
     </div>
