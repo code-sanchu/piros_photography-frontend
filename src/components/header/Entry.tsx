@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import Account from "./user/Entry";
 
@@ -26,11 +27,21 @@ const Logo = () => {
 };
 
 const RightSide = () => {
+  const router = useRouter();
+  const currentRoute = router.route;
+
   return (
     <div className="flex items-center gap-8">
       <div className="flex items-center gap-8">
-        <PageLink href="/videos">videos</PageLink>
-        <PageLink href="/about">about</PageLink>
+        {currentRoute !== "/albums" ? (
+          <PageLink href="/albums">albums</PageLink>
+        ) : null}
+        {currentRoute !== "/videos" ? (
+          <PageLink href="/videos">videos</PageLink>
+        ) : null}
+        {currentRoute !== "/about" ? (
+          <PageLink href="/about">about</PageLink>
+        ) : null}
       </div>
       <Account />
     </div>
