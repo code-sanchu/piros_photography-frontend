@@ -86,7 +86,9 @@ const CommentText = ({
       {isEditing ? (
         <UpdateCommentForm isEditing={isEditing} setIsEditing={setIsEditing} />
       ) : (
-        <p className="font-serif text-base">{comment.text}</p>
+        <p className="whitespace-pre-line font-serif text-base">
+          {comment.text}
+        </p>
       )}
     </div>
   );

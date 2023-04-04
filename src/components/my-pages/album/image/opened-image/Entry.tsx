@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMeasure, useWindowSize } from "@react-hookz/web";
 import { animated, useSpring } from "@react-spring/web";
 
@@ -63,7 +63,7 @@ const ImageAboutAndComments = () => {
     from: { height: "0px", opacity: 0 },
   }));
 
-  const expand = () => {
+  const expandDescription = () => {
     descriptionSpringApi.start({
       height: `${
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -74,7 +74,7 @@ const ImageAboutAndComments = () => {
     setReadMoreIsOpen(true);
   };
 
-  const contract = () => {
+  const contractDescription = () => {
     descriptionSpringApi.start({
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       height: "0px",
@@ -83,35 +83,74 @@ const ImageAboutAndComments = () => {
     setReadMoreIsOpen(false);
   };
 
+  const [commentsMeasurements, commentsDummyRef] = useMeasure<HTMLDivElement>();
+
+  const [commentsSprings, commentsSpringApi] = useSpring(() => ({
+    config: { tension: 280, friction: 60 },
+    from: { height: "0px", opacity: 0 },
+  }));
+
+  const expandComments = () => {
+    commentsSpringApi.start({
+      height: `${
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        commentsMeasurements!.height
+      }px`,
+      opacity: 1,
+    });
+    setCommentsIsOpen(true);
+  };
+
+  const contractComments = () => {
+    commentsSpringApi.start({
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      height: "0px",
+      opacity: 0,
+    });
+    setCommentsIsOpen(false);
+  };
+
+  useEffect(() => {
+    if (!commentsIsOpen || !commentsMeasurements) {
+      return;
+    }
+
+    commentsSpringApi.start({
+      height: `${commentsMeasurements.height}px`,
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [commentsMeasurements?.height]);
+
   const maxTotalWindowHeight = windowSize.height * 0.9;
-  const topBarHeight = 24;
-  const maxHeight =
-    maxTotalWindowHeight - imageDimensions.height - topBarHeight;
+  const maxHeight = maxTotalWindowHeight - imageDimensions.height;
 
   return (
-    <div
-      className="flex flex-col gap-2 "
-      // style={{ maxHeight }}
-    >
+    <div className="flex flex-col gap-2">
       <TopBar
+        commentsIsOpen={commentsIsOpen}
         readMoreIsOpen={readMoreIsOpen}
-        toggleReadMoreIsOpen={readMoreIsOpen ? contract : expand}
-        toggleCommentsIsOpen={() => setCommentsIsOpen(!commentsIsOpen)}
+        toggleReadMoreIsOpen={
+          readMoreIsOpen ? contractDescription : expandDescription
+        }
+        toggleCommentsIsOpen={
+          commentsIsOpen ? contractComments : expandComments
+        }
       />
-      <div className="invisible fixed -z-10" ref={descriptionDummyRef}>
-        <Description />
-      </div>
-      <div className="overflow-y-auto" style={{ maxHeight }}>
-        <animated.div style={{ ...descriptionSprings }}>
+      <div className={"overflow-y-auto"} style={{ maxHeight }}>
+        <div className="invisible fixed -z-10" ref={descriptionDummyRef}>
+          <Description />
+        </div>
+        <animated.div style={{ overflowY: "hidden", ...descriptionSprings }}>
           <Description />
         </animated.div>
+        <div className="invisible fixed -z-10" ref={commentsDummyRef}>
+          <Comments />
+        </div>
+        <animated.div style={{ overflowY: "hidden", ...commentsSprings }}>
+          <Comments />
+        </animated.div>
       </div>
-      {/*       <div className="invisible fixed -z-10" ref={descriptionDummyRef}>
-        <Description />
-      </div>
-      <animated.div style={{ overflowY: "hidden", ...descriptionSprings }}>
-        <Description />
-      </animated.div> */}
     </div>
   );
 };
@@ -127,17 +166,19 @@ const Description = () => {
     <div>
       {/* <div className="border border-blue-600"> */}
       <p className="font-serif text-gray-800">{albumImage.description}</p>
-      <Comments />
+      {/* <Comments /> */}
     </div>
   );
 };
 
 // ! waht to put for see more text
 const TopBar = ({
+  commentsIsOpen,
   readMoreIsOpen,
   toggleReadMoreIsOpen,
   toggleCommentsIsOpen,
 }: {
+  commentsIsOpen: boolean;
   readMoreIsOpen: boolean;
   toggleReadMoreIsOpen: () => void;
   toggleCommentsIsOpen: () => void;
@@ -170,7 +211,7 @@ const TopBar = ({
       </div>
       <div className="flex items-center gap-10">
         <div className="flex items-center gap-3">
-          <WithTooltip text="comments">
+          <WithTooltip text={!commentsIsOpen ? "comments" : "hide comments"}>
             <span
               className={`cursor-pointer text-2xl text-gray-500`}
               onClick={toggleCommentsIsOpen}
