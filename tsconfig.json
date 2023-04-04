@@ -22,7 +22,8 @@
       "~/components/*": ["./src/components/*"],
       "~/containers/*": ["./src/containers/*"],
       "~/albums/*": ["src/components/my-pages/albums/*"],
-      "~/album/*": ["src/components/my-pages/album/*"]
+      "~/album/*": ["src/components/my-pages/album/*"],
+      "~/videos/*": ["src/components/my-pages/videos/*"]
     }
   },
   "include": [

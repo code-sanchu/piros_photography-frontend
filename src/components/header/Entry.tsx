@@ -29,17 +29,17 @@ const RightSide = () => {
   return (
     <div className="flex items-center gap-8">
       <div className="flex items-center gap-8">
-        <PageLink>videos</PageLink>
-        <PageLink>about</PageLink>
+        <PageLink href="/videos">videos</PageLink>
+        <PageLink href="/about">about</PageLink>
       </div>
       <Account />
     </div>
   );
 };
 
-const PageLink = ({ children }: { children: string }) => {
+const PageLink = ({ children, href }: { children: string; href: string }) => {
   return (
-    <Link href={""} passHref>
+    <Link href={href} passHref>
       <p className="text-sm uppercase tracking-wide">{children}</p>
     </Link>
   );
