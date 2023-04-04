@@ -5,13 +5,7 @@ import { animated, useSpring } from "@react-spring/web";
 
 import { SpinnerIcon } from "~/components/icon";
 import SiteLayout from "~/components/layout/Site";
-// import MainMenu from "~/components/main-menu";
 import { localImage } from "~/assets/images";
-
-// Side menu
-// - links: home, albums, videos, about
-// - account?
-// - about info. eg. social links.
 
 const HomePage = () => {
   return (
