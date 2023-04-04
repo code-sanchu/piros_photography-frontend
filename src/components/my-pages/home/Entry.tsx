@@ -1,8 +1,8 @@
 import { useState } from "react";
 import NextImage from "next/image";
 import Link from "next/link";
-import { animated, useSpring } from "@react-spring/web";
 
+import Header from "~/components/header2/Entry";
 import { SpinnerIcon } from "~/components/icon";
 import SiteLayout from "~/components/layout/Site";
 import { localImage } from "~/assets/images";
@@ -11,8 +11,8 @@ const HomePage = () => {
   return (
     <SiteLayout>
       <>
+        <Header isLanding />
         <PageContent />
-        <Menu />
       </>
     </SiteLayout>
   );
@@ -26,11 +26,7 @@ const PageContent = () => {
       <div className="relative h-[90vh] w-[80vw]">
         <MainImage />
         <MainTitle />
-        <div className="mt-2 flex items-center justify-end gap-6">
-          <PageLink href="/albums" text="Albums" />
-          <PageLink href="/videos" text="Videos" />
-          <PageLink href="/about" text="About" />
-        </div>
+        <PageLinks />
       </div>
     </div>
   );
@@ -101,6 +97,16 @@ const MainTitle = () => {
   );
 };
 
+const PageLinks = () => {
+  return (
+    <div className="mt-2 flex items-center justify-end gap-6">
+      <PageLink href="/albums" text="Albums" />
+      <PageLink href="/videos" text="Videos" />
+      <PageLink href="/about" text="About" />
+    </div>
+  );
+};
+
 const PageLink = ({ href, text }: { href: string; text: string }) => {
   return (
     <Link href={href} passHref>
@@ -109,7 +115,7 @@ const PageLink = ({ href, text }: { href: string; text: string }) => {
   );
 };
 
-const Menu = () => {
+/* const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [panelSprings, panelSpringApi] = useSpring(() => ({
@@ -277,3 +283,4 @@ const Socials = () => {
     </div>
   );
 };
+ */

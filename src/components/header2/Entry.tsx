@@ -4,7 +4,15 @@ import { animated, useSpring, type SpringValue } from "@react-spring/web";
 
 import UserMenu from "./user/Entry";
 
-const Header = ({ color = "black" }: { color?: "black" | "white" }) => {
+const Header = ({
+  color = "black",
+  isLanding,
+}: {
+  color?: "black" | "white";
+  isLanding?: true;
+}) => {
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+
   const [panelSprings, panelSpringApi] = useSpring(() => ({
     config: { tension: 280, friction: 60 },
     from: {
@@ -16,31 +24,57 @@ const Header = ({ color = "black" }: { color?: "black" | "white" }) => {
     config: { tension: 280, friction: 60 },
     from: {
       color: color === "black" ? "black" : "white",
+      opacity: isLanding ? 0 : 1,
+    },
+  }));
+
+  const [userMenuSprings, userMenuSpringsApi] = useSpring(() => ({
+    config: { tension: 280, friction: 60 },
+    from: {
+      opacity: isLanding ? 0 : 1,
+      pointerEvents: isLanding ? "none" : "auto",
     },
   }));
 
   return (
     <>
       <div className="fixed left-0 top-0 z-40 flex w-full items-center justify-between p-4">
-        <Logo color={color} logoSprings={logoSprings} />
+        <Logo
+          color={color}
+          logoSprings={logoSprings}
+          disableLink={isLanding && !menuIsOpen}
+        />
         <RightSide
           color={color}
-          closePanelAnimation={() => {
+          onClose={() => {
             panelSpringApi.start({
               translateX: "100%",
             });
             logoSpringsApi.start({
               color: color === "black" ? "black" : "white",
+              opacity: isLanding ? 0 : 1,
             });
+            userMenuSpringsApi.start({
+              opacity: isLanding ? 0 : 1,
+              pointerEvents: isLanding ? "none" : "auto",
+            });
+            setMenuIsOpen(false);
           }}
-          startPanelAnimation={() => {
+          onOpen={() => {
             panelSpringApi.start({
               translateX: "0%",
             });
             logoSpringsApi.start({
               color: "black",
+              opacity: 1,
             });
+            userMenuSpringsApi.start({
+              opacity: 1,
+              pointerEvents: "auto",
+            });
+            setMenuIsOpen(true);
           }}
+          userMenuSprings={userMenuSprings}
         />
       </div>
       <MenuPanel panelSprings={panelSprings} />
@@ -53,12 +87,21 @@ export default Header;
 const Logo = ({
   color,
   logoSprings,
+  disableLink,
 }: {
   color: "black" | "white";
-  logoSprings: Record<string, SpringValue<string>>;
+  logoSprings: {
+    color: SpringValue<string>;
+    opacity: SpringValue<number>;
+  };
+  disableLink?: boolean;
 }) => {
   return (
-    <Link href="/" passHref>
+    <Link
+      href="/"
+      passHref
+      className={disableLink ? "pointer-events-none" : "pointer-events-auto"}
+    >
       <animated.div
         className={`uppercase tracking-widest ${
           color === "white" ? "text-white" : "text-black"
@@ -74,36 +117,52 @@ const Logo = ({
 };
 
 const RightSide = ({
-  closePanelAnimation,
-  startPanelAnimation,
+  // closePanelAnimation,
+  // startPanelAnimation,
   color,
+  onClose,
+  onOpen,
+  userMenuSprings,
 }: {
-  startPanelAnimation: () => void;
-  closePanelAnimation: () => void;
+  // startPanelAnimation: () => void;
+  // closePanelAnimation: () => void;
   color: "black" | "white";
+  // startLogoAnimation: () => void;
+  // closeLogoAnimation: () => void;
+  onOpen: () => void;
+  onClose: () => void;
+  userMenuSprings: {
+    opacity: SpringValue<number>;
+  };
 }) => {
   return (
     <div className="flex items-center gap-8">
-      <div style={{ height: 33.2 }}>
+      <animated.div style={{ ...userMenuSprings, height: 33.2 }}>
         <UserMenu />
-      </div>
+      </animated.div>
       <SiteMenu
         color={color}
-        closePanelAnimation={closePanelAnimation}
-        startPanelAnimation={startPanelAnimation}
+        // closePanelAnimation={closePanelAnimation}
+        // startPanelAnimation={startPanelAnimation}
+        onClose={onClose}
+        onOpen={onOpen}
       />
     </div>
   );
 };
 
 const SiteMenu = ({
-  closePanelAnimation,
-  startPanelAnimation,
+  // closePanelAnimation,
+  // startPanelAnimation,
   color,
+  onClose,
+  onOpen,
 }: {
-  startPanelAnimation: () => void;
-  closePanelAnimation: () => void;
+  // startPanelAnimation: () => void;
+  // closePanelAnimation: () => void;
   color: "black" | "white";
+  onOpen: () => void;
+  onClose: () => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -131,33 +190,40 @@ const SiteMenu = ({
   }));
 
   const openMenu = () => {
-    startPanelAnimation();
+    onOpen();
+
     buttonTopBarSpringApi.start({
       rotate: 45,
       translateY: 8,
       backgroundColor: "black",
     });
+
     buttonMidBarSpringApi.start({
       opacity: 0,
     });
+
     buttonBottomBarSpringApi.start({
       rotate: -45,
       translateY: -8,
       backgroundColor: "black",
     });
+
     setIsOpen(true);
   };
 
   const closeMenu = () => {
-    closePanelAnimation();
+    onClose();
+
     buttonTopBarSpringApi.start({
       rotate: 0,
       translateY: 0,
       backgroundColor: color,
     });
+
     buttonMidBarSpringApi.start({
       opacity: 1,
     });
+
     buttonBottomBarSpringApi.start({
       rotate: 0,
       translateY: 0,
@@ -210,7 +276,7 @@ const MenuPanel = ({
       <div className="flex justify-center">
         <div className="mt-32 flex w-[80%] items-center justify-between">
           <PageLinks />
-          <Socials />
+          <SocialLinks />
         </div>
       </div>
     </animated.div>
@@ -238,23 +304,21 @@ const PageLinks = () => {
   );
 };
 
-const Socials = () => {
+const SocialLinks = () => {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex gap-8">
+    <div className="flex gap-8">
+      <div className="flex flex-col gap-6">
         <p className="text-gray-600">contact</p>
+        <p className="text-gray-600">facebook</p>
+        <p className="text-gray-600">youtube</p>
+      </div>
+      <div className="flex flex-col gap-6">
         <a href="mailto:pirospixs@gmail.com" target="_blank">
           pirospixs@gmail.com
         </a>
-      </div>
-      <div className="flex gap-8">
-        <p className="text-gray-600">facebook</p>
         <a href="https://www.facebook.com/SeeInPictures/" target="_blank">
           @seeinpictures
         </a>
-      </div>
-      <div className="flex gap-4">
-        <p className="text-gray-600">youtube</p>
         <a
           href="https://www.youtube.com/playlist?list=PLdAjHO5OZG7y9CGvEG3Cf3ZgcaCL_p9fZ"
           target="_blank"
