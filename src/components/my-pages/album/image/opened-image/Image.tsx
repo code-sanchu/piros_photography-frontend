@@ -25,7 +25,7 @@ const Image = ({
         height: windowSize.height,
         width: windowSize.width,
       },
-      maxDecimal: { width: 0.8, height: 0.8 },
+      maxDecimal: { width: 0.8, height: 0.7 },
     },
   });
 
@@ -34,7 +34,7 @@ const Image = ({
     openedDimensions.height > unopenedDimensions.height;
 
   return (
-    <div className="relative" style={openedDimensions}>
+    <div className="relative flex-shrink-0" style={openedDimensions}>
       <CldImage
         className={`absolute left-0 top-0 h-full w-full ${
           fullSizeImgIsLoaded ? "opacity-0" : "opacity-100"

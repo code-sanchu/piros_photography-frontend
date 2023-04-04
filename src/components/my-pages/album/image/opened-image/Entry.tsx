@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 
 import { useState } from "react";
-import { useMeasure } from "@react-hookz/web";
+import { useMeasure, useWindowSize } from "@react-hookz/web";
 import { animated, useSpring } from "@react-spring/web";
 
 import WithTooltip from "~/components/WithTooltip";
@@ -10,6 +10,7 @@ import {
   CaretUpIcon,
   ImageCommentIcon,
 } from "~/components/icon";
+import { calcDimensions } from "~/helpers/transformation";
 import { useAlbumImageContext } from "../../_context";
 import Image from "./Image";
 import Likes from "./Likes";
@@ -24,7 +25,7 @@ const OpenedImage = ({
   unopenedDimensions: { width: number; height: number };
 }) => {
   return (
-    <div className="">
+    <div className="flex max-h-[90vh] flex-col gap-2">
       <Image unopenedDimensions={unopenedDimensions} />
       <ImageAboutAndComments />
     </div>
@@ -36,27 +37,45 @@ export default OpenedImage;
 const ImageAboutAndComments = () => {
   const [readMoreIsOpen, setReadMoreIsOpen] = useState(false);
   const [commentsIsOpen, setCommentsIsOpen] = useState(false);
-  // const [descriptionHeight, setDescriptionHeight] = useState(null)
+
+  const albumImage = useAlbumImageContext();
+  const windowSize = useWindowSize();
+  // image size
+  const imageDimensions = calcDimensions({
+    initialDimensions: {
+      height: albumImage.image.naturalHeight,
+      width: albumImage.image.naturalWidth,
+    },
+    transformTo: {
+      maxValue: {
+        height: windowSize.height,
+        width: windowSize.width,
+      },
+      maxDecimal: { width: 0.8, height: 0.7 },
+    },
+  });
 
   const [descriptionMeasurements, descriptionDummyRef] =
     useMeasure<HTMLDivElement>();
 
-  const [springs, api] = useSpring(() => ({
+  const [descriptionSprings, descriptionSpringApi] = useSpring(() => ({
     config: { tension: 280, friction: 60 },
     from: { height: "0px", opacity: 0 },
   }));
 
   const expand = () => {
-    api.start({
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      height: `${descriptionMeasurements!.height}px`,
+    descriptionSpringApi.start({
+      height: `${
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        descriptionMeasurements!.height
+      }px`,
       opacity: 1,
     });
     setReadMoreIsOpen(true);
   };
 
   const contract = () => {
-    api.start({
+    descriptionSpringApi.start({
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       height: "0px",
       opacity: 0,
@@ -64,21 +83,35 @@ const ImageAboutAndComments = () => {
     setReadMoreIsOpen(false);
   };
 
+  const maxTotalWindowHeight = windowSize.height * 0.9;
+  const topBarHeight = 24;
+  const maxHeight =
+    maxTotalWindowHeight - imageDimensions.height - topBarHeight;
+
   return (
-    <div className="flex flex-col gap-2 pt-2">
+    <div
+      className="flex flex-col gap-2 "
+      // style={{ maxHeight }}
+    >
       <TopBar
         readMoreIsOpen={readMoreIsOpen}
         toggleReadMoreIsOpen={readMoreIsOpen ? contract : expand}
-        commentsIsOpen={commentsIsOpen}
         toggleCommentsIsOpen={() => setCommentsIsOpen(!commentsIsOpen)}
       />
       <div className="invisible fixed -z-10" ref={descriptionDummyRef}>
         <Description />
       </div>
-      <animated.div style={{ overflowY: "hidden", ...springs }}>
+      <div className="overflow-y-auto" style={{ maxHeight }}>
+        <animated.div style={{ ...descriptionSprings }}>
+          <Description />
+        </animated.div>
+      </div>
+      {/*       <div className="invisible fixed -z-10" ref={descriptionDummyRef}>
         <Description />
-      </animated.div>
-      {/* {readMoreIsOpen ? <ReadMore /> : null} */}
+      </div>
+      <animated.div style={{ overflowY: "hidden", ...descriptionSprings }}>
+        <Description />
+      </animated.div> */}
     </div>
   );
 };
@@ -90,19 +123,23 @@ const Description = () => {
     return null;
   }
 
-  return <p className="font-serif">{albumImage.description}</p>;
+  return (
+    <div>
+      {/* <div className="border border-blue-600"> */}
+      <p className="font-serif text-gray-800">{albumImage.description}</p>
+      <Comments />
+    </div>
+  );
 };
 
 // ! waht to put for see more text
 const TopBar = ({
   readMoreIsOpen,
   toggleReadMoreIsOpen,
-  commentsIsOpen,
   toggleCommentsIsOpen,
 }: {
   readMoreIsOpen: boolean;
   toggleReadMoreIsOpen: () => void;
-  commentsIsOpen: boolean;
   toggleCommentsIsOpen: () => void;
 }) => {
   const albumImage = useAlbumImageContext();
@@ -173,11 +210,6 @@ const Title = () => {
   return <h3 className="font-serif">{albumImage.title}</h3>;
 };
 
-const ReadMore = () => {
-  return (
-    <div className="">
-      {/* <Description /> */}
-      <CommentFormAndComments />
-    </div>
-  );
+const Comments = () => {
+  return <CommentFormAndComments />;
 };

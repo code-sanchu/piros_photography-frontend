@@ -77,7 +77,7 @@ const Likes = () => {
         >
           <span
             className={`cursor-pointer text-2xl transition-colors duration-75 ease-in-out hover:text-gray-700 ${
-              !imgIsLikedByUser ? "text-gray-500" : "text-gray-400"
+              !imgIsLikedByUser ? "text-gray-500" : "text-gray-600"
             }`}
             onClick={handleToggleLike}
           >

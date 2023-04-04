@@ -61,7 +61,10 @@ const OnContainerMeasurementsReady = (imageDimensions: {
         </div>
       )}
       panelContent={<OpenedImage unopenedDimensions={imageDimensions} />}
-      styles={{ bg: "bg-gray-50/95" }}
+      styles={{
+        bg: "bg-gray-50/95",
+        // parentPanel: "max-h-[90vh] border border-red-600",
+      }}
     />
   );
 };
