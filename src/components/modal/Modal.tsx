@@ -12,7 +12,7 @@ export const Modal = ({
   panelContent:
     | ReactElement
     | ((arg0: { closeModal: () => void }) => ReactElement);
-  styles?: { parentPanel?: string };
+  styles?: { parentPanel?: string; bg?: string };
 }) => {
   return (
     <ModalVisibilityProvider>

@@ -17,8 +17,15 @@ const AlbumPage = ({ albumId }: StaticData) => {
       <Header />
       <AlbumProvider album={album}>
         <div className="flex min-h-screen justify-center">
-          <div className="w-full max-w-[1800px] p-8">
-            <h1 className="text-3xl">{album.title}</h1>
+          <div className="w-full max-w-[1800px] p-8 pt-16">
+            <h1 className="text-7xl font-medium tracking-wider">
+              {album.title}
+            </h1>
+            {album.description ? (
+              <p className="mt-4 max-w-[700px] font-serif">
+                {album.description}
+              </p>
+            ) : null}
             <div className="mt-12">
               <Images />
             </div>

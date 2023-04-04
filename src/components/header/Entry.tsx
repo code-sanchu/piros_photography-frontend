@@ -15,7 +15,7 @@ export default Header;
 
 const Logo = () => {
   return (
-    <h2 className="uppercase tracking-wide">
+    <h2 className="uppercase tracking-widest">
       <span className="text-xl">P</span>iros
       <br />
       <span className="text-xl">P</span>hotography
@@ -38,7 +38,7 @@ const RightSide = () => {
 const PageLink = ({ children }: { children: string }) => {
   return (
     <Link href={""} passHref>
-      <p className="text-sm uppercase">{children}</p>
+      <p className="text-sm uppercase tracking-widest">{children}</p>
     </Link>
   );
 };

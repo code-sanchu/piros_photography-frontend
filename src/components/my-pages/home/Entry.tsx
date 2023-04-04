@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import { SpinnerIcon } from "~/components/icon";
 import SiteLayout from "~/components/layout/Site";
-import MainMenu from "~/components/main-menu";
+// import MainMenu from "~/components/main-menu";
 import { localImage } from "~/assets/images";
 
 // const fnFont = localFont({ src: "../fonts/fengardoneue_regular-webfont.woff" });
@@ -15,7 +15,7 @@ const HomePage = () => {
   return (
     <SiteLayout>
       <>
-        <MainMenu />
+        {/* <MainMenu /> */}
         <PageContent />
       </>
     </SiteLayout>

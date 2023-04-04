@@ -1,4 +1,7 @@
 import {
+  CaretDown,
+  CaretUp,
+  Chat,
   ChatText,
   Check,
   DotsThreeVertical,
@@ -30,4 +33,7 @@ export {
   Trash as DeleteIcon,
   UserCircleGear as AdminIcon,
   HandsClapping as LikeIcon,
+  Chat as ImageCommentIcon,
+  CaretDown as CaretDownIcon,
+  CaretUp as CaretUpIcon,
 };

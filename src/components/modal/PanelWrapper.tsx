@@ -1,12 +1,12 @@
-import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, type ReactElement } from "react";
+import { Dialog, Transition } from "@headlessui/react";
 import { createPortal } from "react-dom";
 
 export type Props = {
   isOpen: boolean;
   closeModal: () => void;
   children: ReactElement;
-  styles?: { parentPanel?: string };
+  styles?: { parentPanel?: string; bg?: string };
 };
 
 export const ModalPanelWrapper = ({
@@ -27,7 +27,10 @@ export const ModalPanelWrapper = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-gray-50/70" aria-hidden="true" />
+          <div
+            className={`fixed inset-0 bg-gray-50/70 ${styles?.bg || ""}`}
+            aria-hidden="true"
+          />
         </Transition.Child>
 
         <div className="fixed inset-0 grid place-items-center p-4">
@@ -47,6 +50,6 @@ export const ModalPanelWrapper = ({
         </div>
       </Dialog>
     </Transition>,
-    document.body
+    document.body,
   );
 };
