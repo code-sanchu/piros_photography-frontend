@@ -274,7 +274,7 @@ const MenuPanel = ({
       style={{ ...panelSprings }}
     >
       <div className="flex justify-center">
-        <div className="mt-32 flex w-[80%] items-center justify-between">
+        <div className="mt-32 flex  w-[80%] max-w-[1200px] items-center justify-between">
           <PageLinks />
           <SocialLinks />
         </div>
@@ -308,9 +308,9 @@ const SocialLinks = () => {
   return (
     <div className="flex gap-8">
       <div className="flex flex-col gap-6">
-        <p className="text-gray-600">contact</p>
-        <p className="text-gray-600">facebook</p>
-        <p className="text-gray-600">youtube</p>
+        <p className="text-gray-400">contact</p>
+        <p className="text-gray-400">facebook</p>
+        <p className="text-gray-400">youtube</p>
       </div>
       <div className="flex flex-col gap-6">
         <a href="mailto:pirospixs@gmail.com" target="_blank">
