@@ -15,11 +15,13 @@ export default Header;
 
 const Logo = () => {
   return (
-    <h2 className="uppercase tracking-widest">
-      <span className="text-xl">P</span>iros
-      <br />
-      <span className="text-xl">P</span>hotography
-    </h2>
+    <Link href="/" passHref>
+      <h2 className="uppercase tracking-widest">
+        <span className="text-xl">P</span>iros
+        <br />
+        <span className="text-xl">P</span>hotography
+      </h2>
+    </Link>
   );
 };
 
@@ -38,12 +40,7 @@ const RightSide = () => {
 const PageLink = ({ children }: { children: string }) => {
   return (
     <Link href={""} passHref>
-      <p className="text-sm uppercase tracking-widest">{children}</p>
+      <p className="text-sm uppercase tracking-wide">{children}</p>
     </Link>
   );
 };
-
-// Side menu
-// - links: home, albums, videos, about
-// - account?
-// - about info. eg. social links.

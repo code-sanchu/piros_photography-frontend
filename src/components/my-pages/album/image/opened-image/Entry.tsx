@@ -211,7 +211,7 @@ const TopBar = ({
       </div>
       <div className="flex items-center gap-10">
         <div className="flex items-center gap-3">
-          <WithTooltip text={!commentsIsOpen ? "comments" : "hide comments"}>
+          <WithTooltip text={!commentsIsOpen ? "comments" : "close comments"}>
             <span
               className={`cursor-pointer text-2xl text-gray-500`}
               onClick={toggleCommentsIsOpen}
