@@ -24,6 +24,9 @@ const config = {
         serif: ["var(--font-my-serif)", ...fontFamily.serif],
         ["serif-secondary"]: ["var(--font-my-serif2)", ...fontFamily.serif],
       },
+      screens: {
+        xs: "510px",
+      },
     },
   },
   plugins: [
