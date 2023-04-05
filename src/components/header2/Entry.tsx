@@ -33,7 +33,7 @@ const Header = ({
     from: {
       opacity: isLanding ? 0 : 1,
       pointerEvents: isLanding ? "none" : "auto",
-      color: color === "black" ? "black" : "white",
+      color: color === "black" ? "gray" : "white",
     },
   }));
 
@@ -58,7 +58,7 @@ const Header = ({
             userMenuSpringsApi.start({
               opacity: isLanding ? 0 : 1,
               pointerEvents: isLanding ? "none" : "auto",
-              color: color === "black" ? "black" : "white",
+              color: color === "black" ? "gray" : "white",
             });
             setMenuIsOpen(false);
           }}
@@ -73,7 +73,7 @@ const Header = ({
             userMenuSpringsApi.start({
               opacity: 1,
               pointerEvents: "auto",
-              color: "black",
+              color: "gray",
             });
             setMenuIsOpen(true);
           }}

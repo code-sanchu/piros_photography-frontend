@@ -1,5 +1,7 @@
+import { type ReactElement } from "react";
+
 import { api } from "~/utils/api";
-import Header from "~/components/header/Entry";
+import Header from "~/components/header2/Entry";
 import { AlbumImageProvider, AlbumProvider, useAlbumContext } from "./_context";
 import { type Album } from "./_types";
 import AlbumImage from "./image/Entry";
@@ -13,36 +15,52 @@ const AlbumPage = ({ albumId }: StaticData) => {
   const album = data as Album;
 
   return (
-    <div>
-      <Header />
+    <Layout>
       <AlbumProvider album={album}>
-        <div className="flex min-h-screen justify-center">
-          <div className="w-full max-w-[1800px] p-8 pt-16">
-            <h1 className="text-7xl font-medium tracking-wider">
-              {album.title}
-            </h1>
-            {album.description ? (
-              <p className="mt-4 max-w-[700px] font-serif">
-                {album.description}
-              </p>
-            ) : null}
-            <div className="mt-12">
-              <Images />
-            </div>
+        <>
+          <Titles />
+          <div className="mt-8 md:mt-12">
+            <Images />
           </div>
-        </div>
+        </>
       </AlbumProvider>
-    </div>
+    </Layout>
   );
 };
 
 export default AlbumPage;
 
+const Layout = ({ children }: { children: ReactElement | ReactElement[] }) => {
+  return (
+    <div className="min-h-screen overflow-x-hidden">
+      <Header />
+      <div className="mt-20 flex justify-center md:mt-28">
+        <div className="w-full max-w-[1800px] p-4 xs:p-6 sm:p-8">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Titles = () => {
+  const album = useAlbumContext();
+
+  return (
+    <>
+      <h1 className="text-6xl md:text-7xl">{album.title}</h1>
+      {album.description ? (
+        <p className="mt-4 max-w-[700px] font-serif">{album.description}</p>
+      ) : null}
+    </>
+  );
+};
+
 const Images = () => {
   const album = useAlbumContext();
 
   return (
-    <div className="grid grid-cols-2 gap-12">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:gap-12">
       {album.images.slice(0, 5).map((albumImage) => (
         <AlbumImageProvider albumImage={albumImage} key={albumImage.id}>
           <AlbumImage />

@@ -45,7 +45,7 @@ export default AuthenticatedMenu;
 const ButtonContent = () => {
   return (
     <WithTooltip text="my account">
-      <div className="rounded-full border-2 border-transparent p-0.5 transition-colors duration-100 ease-in-out  hover:border-gray-100">
+      <div className="rounded-full border-2 border-transparent bg-white p-0.5 transition-colors duration-100  ease-in-out hover:bg-gray-100">
         <UserImage sideSize={26} />
       </div>
     </WithTooltip>
