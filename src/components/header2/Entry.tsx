@@ -4,6 +4,8 @@ import { animated, useSpring, type SpringValue } from "@react-spring/web";
 
 import UserMenu from "./user/Entry";
 
+// ! td: go gover this and home page responsiveness
+
 const Header = ({
   color = "black",
   isLanding,
@@ -38,13 +40,13 @@ const Header = ({
 
   return (
     <>
-      <div className="fixed left-0 top-0 z-40 flex w-full items-center justify-between p-4">
+      <div className="fixed left-0 top-0 z-40 flex w-full items-center justify-between px-4 py-2 xl:px-8 xl:py-6">
         <Logo
           color={color}
           logoSprings={logoSprings}
           disableLink={isLanding && !menuIsOpen}
         />
-        <RightSide
+        <HeaderRightSide
           color={color}
           onClose={() => {
             panelSpringApi.start({
@@ -77,7 +79,7 @@ const Header = ({
           userMenuSprings={userMenuSprings}
         />
       </div>
-      <MenuPanel panelSprings={panelSprings} />
+      <SiteMenuPanel panelSprings={panelSprings} />
     </>
   );
 };
@@ -103,32 +105,26 @@ const Logo = ({
       className={disableLink ? "pointer-events-none" : "pointer-events-auto"}
     >
       <animated.div
-        className={`uppercase tracking-widest ${
+        className={`text-sm uppercase tracking-widest xl:text-base ${
           color === "white" ? "text-white" : "text-black"
         }`}
         style={{ ...logoSprings }}
       >
-        <span className="text-xl">P</span>iros
+        <span className="text-lg xl:text-xl">P</span>iros
         <br />
-        <span className="text-xl">P</span>hotography
+        <span className="text-lg xl:text-xl">P</span>hotography
       </animated.div>
     </Link>
   );
 };
 
-const RightSide = ({
-  // closePanelAnimation,
-  // startPanelAnimation,
+const HeaderRightSide = ({
   color,
   onClose,
   onOpen,
   userMenuSprings,
 }: {
-  // startPanelAnimation: () => void;
-  // closePanelAnimation: () => void;
   color: "black" | "white";
-  // startLogoAnimation: () => void;
-  // closeLogoAnimation: () => void;
   onOpen: () => void;
   onClose: () => void;
   userMenuSprings: {
@@ -137,29 +133,19 @@ const RightSide = ({
 }) => {
   return (
     <div className="flex items-center gap-8">
-      <animated.div style={{ ...userMenuSprings, height: 33.2 }}>
+      <animated.div style={{ ...userMenuSprings }}>
         <UserMenu />
       </animated.div>
-      <SiteMenu
-        color={color}
-        // closePanelAnimation={closePanelAnimation}
-        // startPanelAnimation={startPanelAnimation}
-        onClose={onClose}
-        onOpen={onOpen}
-      />
+      <SiteMenuButton color={color} onClose={onClose} onOpen={onOpen} />
     </div>
   );
 };
 
-const SiteMenu = ({
-  // closePanelAnimation,
-  // startPanelAnimation,
+const SiteMenuButton = ({
   color,
   onClose,
   onOpen,
 }: {
-  // startPanelAnimation: () => void;
-  // closePanelAnimation: () => void;
   color: "black" | "white";
   onOpen: () => void;
   onClose: () => void;
@@ -235,7 +221,7 @@ const SiteMenu = ({
   return (
     <>
       <div
-        className="flex cursor-pointer flex-col gap-1 p-1"
+        className="flex cursor-pointer flex-col gap-1"
         onClick={() => {
           if (isOpen) {
             closeMenu();
@@ -245,17 +231,17 @@ const SiteMenu = ({
         }}
       >
         <animated.div
-          className="h-[2px] w-[26px]"
+          className="h-[2px] w-[23px] xl:w-[26px] 2xl:w-[30px]"
           style={{ ...buttonTopBarSprings }}
         />
         <animated.div
-          className={`h-[2px] w-[26px] ${
+          className={`h-[2px] w-[23px] xl:w-[26px] 2xl:w-[30px] ${
             color === "white" ? "bg-white" : "bg-black"
           }`}
           style={{ ...buttonMidBarSprings }}
         />
         <animated.div
-          className="h-[2px] w-[26px] bg-black"
+          className="h-[2px] w-[23px] xl:w-[26px] 2xl:w-[30px]"
           style={{ ...buttonBottomBarSprings }}
         />
       </div>
@@ -263,7 +249,7 @@ const SiteMenu = ({
   );
 };
 
-const MenuPanel = ({
+const SiteMenuPanel = ({
   panelSprings,
 }: {
   panelSprings: Record<string, SpringValue<string>>;
@@ -273,8 +259,8 @@ const MenuPanel = ({
       className="fixed inset-0 z-30 bg-white p-8"
       style={{ ...panelSprings }}
     >
-      <div className="flex justify-center">
-        <div className="mt-32 flex  w-[80%] max-w-[1200px] items-center justify-between">
+      <div className="flex  justify-center">
+        <div className="mt-24 flex flex-col gap-12 md:mt-32 md:w-[80%] md:max-w-[1200px] md:flex-row md:items-center md:justify-between">
           <PageLinks />
           <SocialLinks />
         </div>
@@ -287,20 +273,20 @@ const PageLinks = () => {
   return (
     <div className="flex items-center gap-8">
       <div className="flex flex-col gap-6">
-        <Link href={"/"} passHref>
-          <p className="text-4xl tracking-wide">Home</p>
-        </Link>
-        <Link href={"/albums"} passHref>
-          <p className="text-4xl tracking-wide">Albums</p>
-        </Link>
-        <Link href={"/videos"} passHref>
-          <p className="text-4xl tracking-wide">Videos</p>
-        </Link>
-        <Link href={"/about"} passHref>
-          <p className="text-4xl tracking-wide">About</p>
-        </Link>
+        <PageLink href="/" text="Home" />
+        <PageLink href="/albums" text="Albums" />
+        <PageLink href="/videos" text="Videos" />
+        <PageLink href="/about" text="About" />
       </div>
     </div>
+  );
+};
+
+const PageLink = ({ href, text }: { href: string; text: string }) => {
+  return (
+    <Link href={href} passHref>
+      <p className="text-3xl tracking-wide xl:text-4xl">{text}</p>
+    </Link>
   );
 };
 

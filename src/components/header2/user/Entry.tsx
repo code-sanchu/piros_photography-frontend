@@ -24,6 +24,8 @@ const OnLoad = () => {
       <p className="text-sm text-gray-600">Sign in</p>
     </Link>
   ) : (
-    <AuthenticatedMenu />
+    <div style={{ height: 33.2 }}>
+      <AuthenticatedMenu />
+    </div>
   );
 };
