@@ -76,13 +76,14 @@ const Likes = () => {
           isDisabled={!session.data}
         >
           <span
-            className={`cursor-pointer text-2xl transition-colors duration-75 ease-in-out hover:text-gray-700 ${
-              !imgIsLikedByUser ? "text-gray-500" : "text-gray-600"
+            className={`cursor-pointer text-xl transition-colors duration-75 ease-in-out hover:text-gray-700 ${
+              !imgIsLikedByUser ? "text-gray-800" : "text-blue-600"
             }`}
             onClick={handleToggleLike}
           >
             <LikeIcon
-              weight={imgIsLikedByUser ? "fill" : "thin"}
+              weight="thin"
+              // weight={imgIsLikedByUser ? "fill" : "thin"}
               /*               fill={
                 !imgIsLikedByUser ? "rgb(107 114 128)" : " rgb(156 163 175)"
               } */
@@ -90,7 +91,7 @@ const Likes = () => {
           </span>
         </WithTooltip>
         {albumImage.likes.length ? (
-          <span className="text-sm font-thin text-gray-900">
+          <span className="font-sans-secondary text-sm font-thin tracking-wide text-gray-900">
             {albumImage.likes.length}
           </span>
         ) : null}

@@ -28,12 +28,13 @@ export const ModalPanelWrapper = ({
           leaveTo="opacity-0"
         >
           <div
-            className={`fixed inset-0 bg-gray-50/70 ${styles?.bg || ""}`}
+            className={`fixed inset-0 ${styles?.bg || "bg-gray-50/70 "}`}
             aria-hidden="true"
           />
         </Transition.Child>
 
-        <div className="fixed inset-0 grid place-items-center p-4">
+        <div className="fixed inset-0 grid place-items-center">
+          {/* <div className="fixed inset-0 grid place-items-center p-4"> */}
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"

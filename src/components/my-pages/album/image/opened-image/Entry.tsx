@@ -17,7 +17,6 @@ import Likes from "./Likes";
 import CommentFormAndComments from "./comment-form-and-comments/Entry";
 
 // ! td: prev/next img; lazy load read more content
-// ! td: could have 'respond' button to show comments
 
 const OpenedImage = ({
   unopenedDimensions,
@@ -25,9 +24,11 @@ const OpenedImage = ({
   unopenedDimensions: { width: number; height: number };
 }) => {
   return (
-    <div className="flex max-h-[90vh] flex-col gap-2">
-      <Image unopenedDimensions={unopenedDimensions} />
-      <ImageAboutAndComments />
+    <div className="grid h-[100vh] w-screen place-items-center overflow-y-auto pt-8 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
+      <div className="flex flex-col gap-2">
+        <Image unopenedDimensions={unopenedDimensions} />
+        <ImageAboutAndComments />
+      </div>
     </div>
   );
 };
@@ -38,10 +39,10 @@ const ImageAboutAndComments = () => {
   const [readMoreIsOpen, setReadMoreIsOpen] = useState(false);
   const [commentsIsOpen, setCommentsIsOpen] = useState(false);
 
-  const albumImage = useAlbumImageContext();
-  const windowSize = useWindowSize();
-  // image size
-  const imageDimensions = calcDimensions({
+  // const albumImage = useAlbumImageContext();
+  // const windowSize = useWindowSize();
+
+  /*   const imageDimensions = calcDimensions({
     initialDimensions: {
       height: albumImage.image.naturalHeight,
       width: albumImage.image.naturalWidth,
@@ -51,9 +52,9 @@ const ImageAboutAndComments = () => {
         height: windowSize.height,
         width: windowSize.width,
       },
-      maxDecimal: { width: 0.8, height: 0.7 },
+      maxDecimal: { width: 0.9, height: 0.7 },
     },
-  });
+  }); */
 
   const [descriptionMeasurements, descriptionDummyRef] =
     useMeasure<HTMLDivElement>();
@@ -122,11 +123,11 @@ const ImageAboutAndComments = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [commentsMeasurements?.height]);
 
-  const maxTotalWindowHeight = windowSize.height * 0.9;
-  const maxHeight = maxTotalWindowHeight - imageDimensions.height;
+  // const maxTotalWindowHeight = windowSize.height * 0.9;
+  // const maxHeight = maxTotalWindowHeight - imageDimensions.height;
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="mt-4 flex flex-col gap-2">
       <TopBar
         commentsIsOpen={commentsIsOpen}
         readMoreIsOpen={readMoreIsOpen}
@@ -137,7 +138,7 @@ const ImageAboutAndComments = () => {
           commentsIsOpen ? contractComments : expandComments
         }
       />
-      <div className={"overflow-y-auto"} style={{ maxHeight }}>
+      <div>
         <div className="invisible fixed -z-10" ref={descriptionDummyRef}>
           <Description />
         </div>
@@ -145,33 +146,16 @@ const ImageAboutAndComments = () => {
           <Description />
         </animated.div>
         <div className="invisible fixed -z-10" ref={commentsDummyRef}>
-          <Comments />
+          <CommentFormAndComments />;
         </div>
         <animated.div style={{ overflowY: "hidden", ...commentsSprings }}>
-          <Comments />
+          <CommentFormAndComments />;
         </animated.div>
       </div>
     </div>
   );
 };
 
-const Description = () => {
-  const albumImage = useAlbumImageContext();
-
-  if (!albumImage.description?.length) {
-    return null;
-  }
-
-  return (
-    <div>
-      {/* <div className="border border-blue-600"> */}
-      <p className="font-serif text-gray-800">{albumImage.description}</p>
-      {/* <Comments /> */}
-    </div>
-  );
-};
-
-// ! waht to put for see more text
 const TopBar = ({
   commentsIsOpen,
   readMoreIsOpen,
@@ -190,39 +174,77 @@ const TopBar = ({
       <div className="flex items-center gap-8">
         <Title />
         {albumImage.description?.length ? (
-          <div
-            className="flex cursor-pointer items-center gap-2"
-            onClick={toggleReadMoreIsOpen}
-          >
-            <span className="font-sans text-sm tracking-wide text-gray-400">
+          <WithTooltip text="description">
+            <div
+              className="flex cursor-pointer items-center gap-2"
+              onClick={toggleReadMoreIsOpen}
+            >
+              {/*             <span className="font-sans text-sm tracking-wide text-gray-400">
               about
-            </span>
-            {!readMoreIsOpen ? (
-              <span className="text-xs text-gray-400">
-                <CaretDownIcon />
-              </span>
-            ) : (
-              <span className="text-xs text-gray-400">
-                <CaretUpIcon />
-              </span>
-            )}
-          </div>
+            </span> */}
+              {!readMoreIsOpen ? (
+                <span className="text-xs text-gray-400">
+                  <CaretDownIcon weight="light" />
+                </span>
+              ) : (
+                <span className="text-xs text-gray-400">
+                  <CaretUpIcon weight="light" />
+                </span>
+              )}
+            </div>
+          </WithTooltip>
         ) : null}
       </div>
       <div className="flex items-center gap-10">
-        <div className="flex items-center gap-3">
-          <WithTooltip text={!commentsIsOpen ? "comments" : "close comments"}>
-            <span
-              className={`cursor-pointer text-2xl text-gray-500`}
-              onClick={toggleCommentsIsOpen}
-            >
-              <ImageCommentIcon weight="thin" />
-            </span>
-          </WithTooltip>
-          <CommentsCount />
-        </div>
+        <CommentsIconAndCount
+          commentsIsOpen={commentsIsOpen}
+          onClick={toggleCommentsIsOpen}
+        />
         <Likes />
       </div>
+    </div>
+  );
+};
+
+const Title = () => {
+  const albumImage = useAlbumImageContext();
+
+  if (!albumImage.title?.length) {
+    return null;
+  }
+
+  return (
+    <h3 className="font-sans-secondary text-base font-light tracking-wide">
+      {albumImage.title}
+    </h3>
+  );
+};
+
+const Description = () => {
+  const albumImage = useAlbumImageContext();
+
+  if (!albumImage.description?.length) {
+    return null;
+  }
+
+  return <p className="font-serif-3 text-lg">{albumImage.description}</p>;
+};
+
+const CommentsIconAndCount = ({
+  commentsIsOpen,
+  onClick,
+}: {
+  commentsIsOpen: boolean;
+  onClick: () => void;
+}) => {
+  return (
+    <div className="flex items-center gap-3" onClick={onClick}>
+      <WithTooltip text={!commentsIsOpen ? "comments" : "close comments"}>
+        <span className={`cursor-pointer text-xl text-gray-800`}>
+          <ImageCommentIcon weight="thin" />
+        </span>
+      </WithTooltip>
+      <CommentsCount />
     </div>
   );
 };
@@ -235,22 +257,8 @@ const CommentsCount = () => {
   }
 
   return (
-    <p className="text-sm font-thin text-gray-900">
+    <p className="font-sans-secondary text-sm font-thin tracking-wide text-gray-900">
       {albumImage.comments.length}
     </p>
   );
-};
-
-const Title = () => {
-  const albumImage = useAlbumImageContext();
-
-  if (!albumImage.title?.length) {
-    return null;
-  }
-
-  return <h3 className="font-serif">{albumImage.title}</h3>;
-};
-
-const Comments = () => {
-  return <CommentFormAndComments />;
 };

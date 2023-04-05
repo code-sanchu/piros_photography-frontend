@@ -9,3 +9,6 @@
     @apply outline-none focus:outline-none;
   }
 }
+html {
+  @apply scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400;
+}
