@@ -4,7 +4,7 @@ import { type ReactElement } from "react";
 import NextImage from "next/image";
 
 import { api, type RouterOutputs } from "~/utils/api";
-import Header from "~/components/header2/Entry";
+import Header from "~/components/header/Entry";
 import { localImage } from "~/assets/images";
 
 type PageText = NonNullable<RouterOutputs["aboutPage"]["getText"]>;

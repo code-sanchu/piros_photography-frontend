@@ -2,7 +2,7 @@ import { useState } from "react";
 import NextImage from "next/image";
 import Link from "next/link";
 
-import Header from "~/components/header2/Entry";
+import Header from "~/components/header/Entry";
 import { SpinnerIcon } from "~/components/icon";
 import SiteLayout from "~/components/layout/Site";
 import { localImage } from "~/assets/images";

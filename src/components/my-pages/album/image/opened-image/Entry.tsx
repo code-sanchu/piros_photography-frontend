@@ -8,7 +8,6 @@ import { animated, useSpring } from "@react-spring/web";
 import WithTooltip from "~/components/WithTooltip";
 import {
   CaretDownIcon,
-  CaretRightIcon,
   CaretUpIcon,
   ImageCommentIcon,
 } from "~/components/icon";
@@ -18,10 +17,8 @@ import LikesIconAndCount from "./Likes";
 import CommentFormAndComments from "./comment-form-and-comments/Entry";
 
 const OpenedImage = ({
-  closeImage,
   unopenedDimensions,
 }: {
-  closeImage: () => void;
   unopenedDimensions: { width: number; height: number };
 }) => {
   return (
@@ -30,22 +27,6 @@ const OpenedImage = ({
         <Image unopenedDimensions={unopenedDimensions} />
         <DescriptionAndUserInteractivity />
       </div>
-      <button
-        className="absolute right-3 top-3 text-sm"
-        onClick={closeImage}
-        type="button"
-      >
-        close
-      </button>
-      {/* <WithTooltip text="next image">
-        <button
-          className="absolute right-3 top-1/2 -translate-x-1/2 text-3xl text-gray-400 transition-colors duration-75 ease-in-out hover:text-gray-600"
-          onClick={closeImage}
-          type="button"
-        >
-          <CaretRightIcon />
-        </button>
-      </WithTooltip> */}
     </div>
   );
 };
@@ -139,14 +120,14 @@ const DescriptionAndUserInteractivity = () => {
           <DescriptionText />
         </animated.div>
         <animated.div style={{ overflowY: "hidden", ...commentsSprings }}>
-          <CommentFormAndComments closeComments={closeComments} />;
+          <CommentFormAndComments closeComments={closeComments} />
         </animated.div>
       </div>
       <div className="invisible fixed -z-10" ref={descriptionDummyRef}>
         <DescriptionText />
       </div>
       <div className="invisible fixed -z-10" ref={commentsDummyRef}>
-        <CommentFormAndComments closeComments={closeComments} />;
+        <CommentFormAndComments closeComments={closeComments} />
       </div>
     </>
   );

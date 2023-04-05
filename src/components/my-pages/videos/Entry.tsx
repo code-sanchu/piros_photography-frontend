@@ -3,7 +3,7 @@ import { useMeasure } from "@react-hookz/web";
 
 import { api } from "~/utils/api";
 import YoutubeIFrame from "~/components/YoutubeIframe";
-import Header from "~/components/header2/Entry";
+import Header from "~/components/header/Entry";
 import { getYoutubeEmbedUrlFromId } from "~/helpers/youtube";
 import { type Video } from "./_types";
 

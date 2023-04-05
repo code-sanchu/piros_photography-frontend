@@ -1,10 +1,8 @@
 import { useMeasure } from "@react-hookz/web";
 
 import MyCldImage from "~/components/image/MyCldImage";
-import { Modal } from "~/components/modal";
 import { calcImgHeightForWidth } from "~/helpers/transformation";
 import { useAlbumImageContext } from "../_context";
-import OpenedImage from "./opened-image/Entry";
 
 const AlbumImage = () => {
   const albumImage = useAlbumImageContext();
@@ -51,6 +49,20 @@ const OnContainerMeasurementsReady = (imageDimensions: {
   const albumImage = useAlbumImageContext();
 
   return (
+    <MyCldImage
+      dimensions={imageDimensions}
+      src={albumImage.image.cloudinary_public_id}
+    />
+  );
+};
+
+/* const OnContainerMeasurementsReadyOLD = (imageDimensions: {
+  width: number;
+  height: number;
+}) => {
+  const albumImage = useAlbumImageContext();
+
+  return (
     <Modal
       button={({ openModal }) => (
         <div className="h-full cursor-pointer" onClick={openModal}>
@@ -61,16 +73,12 @@ const OnContainerMeasurementsReady = (imageDimensions: {
         </div>
       )}
       panelContent={({ closeModal }) => (
-        <OpenedImage
-          closeImage={closeModal}
-          unopenedDimensions={imageDimensions}
-        />
+        <OpenedImage unopenedDimensions={imageDimensions} />
       )}
       styles={{
         bg: "bg-white",
-        /*         parentPanel:
-          "h-[100vh] border border-red-600 w-screen flex justify-center overflow-y-auto pt-8", */
       }}
     />
   );
 };
+ */

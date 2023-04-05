@@ -1,12 +1,14 @@
-import { type ReactElement } from "react";
+import { useState, type ReactElement } from "react";
 
 import { api } from "~/utils/api";
-import Header from "~/components/header2/Entry";
+import Header from "~/components/header/Entry";
 import { AlbumImageProvider, AlbumProvider, useAlbumContext } from "./_context";
 import { type Album } from "./_types";
 import ImagesSwiper from "./image-swiper/Entry";
 import AlbumImage from "./image/Entry";
 import { type StaticData } from "./staticData";
+
+// ! td: pass initial img dimensions to swiper
 
 const AlbumPage = ({ albumId }: StaticData) => {
   const { data } = api.album.albumPageGetOne.useQuery(
@@ -23,10 +25,8 @@ const AlbumPage = ({ albumId }: StaticData) => {
           <div className="mt-8 md:mt-12">
             <Images />
           </div>
-          <ImagesSwiper />
         </>
       </AlbumProvider>
-      <button className="fixed top-2 left-1/2">SHOW SLIDER</button>
     </Layout>
   );
 };
@@ -60,15 +60,29 @@ const Titles = () => {
 };
 
 const Images = () => {
+  const [swiperImageIndex, setSwiperImageIndex] = useState<number | null>(null);
+
   const album = useAlbumContext();
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:gap-12">
-      {album.images.slice(0, 5).map((albumImage) => (
-        <AlbumImageProvider albumImage={albumImage} key={albumImage.id}>
-          <AlbumImage />
-        </AlbumImageProvider>
-      ))}
-    </div>
+    <>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:gap-12">
+        {album.images.map((albumImage, i) => (
+          <AlbumImageProvider albumImage={albumImage} key={albumImage.id}>
+            <div
+              className="cursor-pointer"
+              onClick={() => setSwiperImageIndex(i)}
+            >
+              <AlbumImage />
+            </div>
+          </AlbumImageProvider>
+        ))}
+      </div>
+      <ImagesSwiper
+        closeSwiper={() => setSwiperImageIndex(null)}
+        imageIndex={swiperImageIndex}
+        setImageIndex={setSwiperImageIndex}
+      />
+    </>
   );
 };

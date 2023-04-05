@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMeasure } from "react-use";
 
 import { api, type RouterOutputs } from "~/utils/api";
-import Header from "~/components/header2/Entry";
+import Header from "~/components/header/Entry";
 import MyCldImage from "~/components/image/MyCldImage";
 import { calcImgHeightForWidth } from "~/helpers/transformation";
 import { type MyOmit } from "~/types/utilities";
