@@ -19,10 +19,8 @@ type Album = MyOmit<RouterAlbum, "coverImage"> & {
 const AlbumsPage = () => {
   return (
     <Layout>
-      <div className="mt-8">
-        <Titles />
-      </div>
-      <div className="mt-12">
+      <Titles />
+      <div className="mt-8 md:mt-12">
         <Albums />
       </div>
     </Layout>
@@ -35,8 +33,10 @@ const Layout = ({ children }: { children: ReactElement | ReactElement[] }) => {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Header />
-      <div className="mt-16 flex justify-center">
-        <div className="w-full max-w-[1800px] p-8">{children}</div>
+      <div className="mt-20 flex justify-center md:mt-28">
+        <div className="w-full max-w-[1800px] p-4 xs:p-6 sm:p-8">
+          {children}
+        </div>
       </div>
     </div>
   );
@@ -50,9 +50,9 @@ const Titles = () => {
 
   return (
     <div>
-      <h1 className="text-7xl">{pageText.title}</h1>
+      <h1 className="text-6xl md:text-7xl">{pageText.title}</h1>
       {pageText.subTitle?.length ? (
-        <h3 className="text-4xl">{pageText.subTitle}</h3>
+        <h3 className="font-serif text-2xl md:text-4xl">{pageText.subTitle}</h3>
       ) : null}
     </div>
   );
@@ -65,7 +65,7 @@ const Albums = () => {
   const albums = data as unknown as Album[];
 
   return (
-    <div className="grid grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
       {albums.map((album) => (
         <Album album={album} key={album.id}></Album>
       ))}
@@ -92,7 +92,7 @@ const Album = ({ album }: { album: Album }) => {
 
               return (
                 <Fragment key={i}>
-                  <div className="text-lg text-gray-700 transition-colors duration-75 ease-in-out group-hover/album:text-gray-900">
+                  <div className=" text-gray-700 transition-colors duration-75 ease-in-out group-hover/album:text-gray-900 xs:text-lg">
                     {album.title}
                   </div>
                   <div className="mt-1" style={{ height }}>

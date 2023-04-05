@@ -3,17 +3,17 @@ import { useMeasure } from "@react-hookz/web";
 
 import { api } from "~/utils/api";
 import YoutubeIFrame from "~/components/YoutubeIframe";
-import Header from "~/components/header/Entry";
+import Header from "~/components/header2/Entry";
 import { getYoutubeEmbedUrlFromId } from "~/helpers/youtube";
 import { type Video } from "./_types";
 
 const VideosPage = () => {
   return (
     <Layout>
-      <div className="mt-8">
+      <div className="mt-8 sm:mt-12">
         <Titles />
       </div>
-      <div className="mt-12">
+      <div className="mt-6 sm:mt-12">
         <Videos />
       </div>
     </Layout>
@@ -26,7 +26,7 @@ const Layout = ({ children }: { children: ReactElement | ReactElement[] }) => {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Header />
-      <div className="flex justify-center">
+      <div className="mt-10 flex justify-center">
         <div className="w-full max-w-[1200px] p-8">{children}</div>
       </div>
     </div>
@@ -36,8 +36,8 @@ const Layout = ({ children }: { children: ReactElement | ReactElement[] }) => {
 const Titles = () => {
   return (
     <div>
-      <h1 className="text-7xl">Videos</h1>
-      <p className="mt-4 font-serif text-gray-500">
+      <h1 className="text-6xl sm:text-7xl">Videos</h1>
+      <p className="mt-2 font-serif text-gray-500 md:mt-4">
         See more on youtube{" "}
         <a
           href="https://www.youtube.com/playlist?list=PLdAjHO5OZG7y9CGvEG3Cf3ZgcaCL_p9fZ"

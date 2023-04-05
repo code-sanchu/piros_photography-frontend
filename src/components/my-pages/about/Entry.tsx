@@ -46,20 +46,20 @@ const BannerImage = () => {
 
 const SocialLinks = () => {
   return (
-    <div className="flex gap-12 px-4 pt-1 text-sm">
-      <div className="flex gap-4">
+    <div className="mt-2 flex flex-col gap-2 px-4 pt-1 text-sm sm:mt-0 sm:flex-row sm:gap-8 md:gap-12 md:text-base">
+      <div className="flex gap-2 md:gap-4">
         <p className="text-gray-400">contact</p>
         <a href="mailto:pirospixs@gmail.com" target="_blank">
           pirospixs@gmail.com
         </a>
       </div>
-      <div className="flex gap-4">
+      <div className="flex gap-2 md:gap-4">
         <p className="text-gray-400">facebook</p>
         <a href="https://www.facebook.com/SeeInPictures/" target="_blank">
           @seeinpictures
         </a>
       </div>
-      <div className="flex gap-4">
+      <div className="flex gap-2 md:gap-4">
         <p className="text-gray-400">youtube</p>
         <a
           href="https://www.youtube.com/playlist?list=PLdAjHO5OZG7y9CGvEG3Cf3ZgcaCL_p9fZ"
@@ -79,7 +79,7 @@ const MainText = () => {
   const textData = data as PageText;
 
   return (
-    <div className="mt-16 flex justify-center">
+    <div className="mt-12 flex justify-center px-4 md:mt-16">
       <p className="whitespace-pre-line font-serif">{textData.body}</p>
     </div>
   );

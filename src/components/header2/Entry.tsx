@@ -4,8 +4,6 @@ import { animated, useSpring, type SpringValue } from "@react-spring/web";
 
 import UserMenu from "./user/Entry";
 
-// ! td: go gover this and home page responsiveness
-
 const Header = ({
   color = "black",
   isLanding,
@@ -35,6 +33,7 @@ const Header = ({
     from: {
       opacity: isLanding ? 0 : 1,
       pointerEvents: isLanding ? "none" : "auto",
+      color: color === "black" ? "black" : "white",
     },
   }));
 
@@ -59,6 +58,7 @@ const Header = ({
             userMenuSpringsApi.start({
               opacity: isLanding ? 0 : 1,
               pointerEvents: isLanding ? "none" : "auto",
+              color: color === "black" ? "black" : "white",
             });
             setMenuIsOpen(false);
           }}
@@ -73,6 +73,7 @@ const Header = ({
             userMenuSpringsApi.start({
               opacity: 1,
               pointerEvents: "auto",
+              color: "black",
             });
             setMenuIsOpen(true);
           }}

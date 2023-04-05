@@ -21,7 +21,7 @@ const OnLoad = () => {
 
   return status === "unauthenticated" ? (
     <Link href={routes.signIn} passHref>
-      <p className="text-sm text-gray-600">Sign in</p>
+      <p className="text-sm ">Sign in</p>
     </Link>
   ) : (
     <div style={{ height: 33.2 }}>
