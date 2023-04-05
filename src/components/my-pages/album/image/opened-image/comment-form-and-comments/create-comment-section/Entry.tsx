@@ -29,7 +29,7 @@ const HandleCommentFormForUserStatus = ({
   const session = useSession();
 
   return (
-    <div className="mt-8">
+    <div className="mt-4">
       {session.status === "loading" ? (
         <p>Loading authentication status...</p>
       ) : session.status === "unauthenticated" ? (

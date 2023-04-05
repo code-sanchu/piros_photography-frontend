@@ -60,7 +60,12 @@ const OnContainerMeasurementsReady = (imageDimensions: {
           />
         </div>
       )}
-      panelContent={<OpenedImage unopenedDimensions={imageDimensions} />}
+      panelContent={({ closeModal }) => (
+        <OpenedImage
+          closeImage={closeModal}
+          unopenedDimensions={imageDimensions}
+        />
+      )}
       styles={{
         bg: "bg-white",
         /*         parentPanel:

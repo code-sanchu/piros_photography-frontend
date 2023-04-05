@@ -1,5 +1,7 @@
 import {
   CaretDown,
+  CaretLeft,
+  CaretRight,
   CaretUp,
   Chat,
   ChatText,
@@ -36,4 +38,6 @@ export {
   Chat as ImageCommentIcon,
   CaretDown as CaretDownIcon,
   CaretUp as CaretUpIcon,
+  CaretRight as CaretRightIcon,
+  CaretLeft as CaretLeftIcon,
 };

@@ -4,6 +4,7 @@ import { api } from "~/utils/api";
 import Header from "~/components/header2/Entry";
 import { AlbumImageProvider, AlbumProvider, useAlbumContext } from "./_context";
 import { type Album } from "./_types";
+import ImagesSwiper from "./image-swiper/Entry";
 import AlbumImage from "./image/Entry";
 import { type StaticData } from "./staticData";
 
@@ -22,8 +23,10 @@ const AlbumPage = ({ albumId }: StaticData) => {
           <div className="mt-8 md:mt-12">
             <Images />
           </div>
+          <ImagesSwiper />
         </>
       </AlbumProvider>
+      <button className="fixed top-2 left-1/2">SHOW SLIDER</button>
     </Layout>
   );
 };
