@@ -15,7 +15,7 @@ const Image = ({
   const albumImage = useAlbumImageContext();
   const windowSize = useWindowSize();
 
-  const imageWidthOpened =
+  const imageWidthOpenedMaxDecimal =
     windowSize.width > 850 ? 0.9 : windowSize.width > 600 ? 0.85 : 0.8;
 
   const openedDimensions = calcDimensions({
@@ -29,15 +29,15 @@ const Image = ({
         width: windowSize.width,
       },
       maxDecimal: {
-        width: imageWidthOpened,
+        width: imageWidthOpenedMaxDecimal,
         height: 0.8,
       },
     },
   });
 
-  const openedImageIsLarger =
+  /*   const openedImageIsLarger =
     openedDimensions.width > unopenedDimensions.width &&
-    openedDimensions.height > unopenedDimensions.height;
+    openedDimensions.height > unopenedDimensions.height; */
 
   return (
     <div className="relative flex-shrink-0" style={openedDimensions}>
@@ -50,18 +50,18 @@ const Image = ({
         alt=""
         loading="lazy"
       />
-      {openedImageIsLarger ? (
-        <CldImage
-          className={`absolute left-0 top-0 h-full w-full ${
-            fullSizeImgIsLoaded ? "opacity-100" : "opacity-0"
-          }`}
-          src={albumImage.image.cloudinary_public_id}
-          {...openedDimensions}
-          onLoad={() => setFullSizeImgIsLoaded(true)}
-          alt=""
-          loading="lazy"
-        />
-      ) : null}
+      {/* {openedImageIsLarger ? ( */}
+      <CldImage
+        className={`absolute left-0 top-0 h-full w-full ${
+          fullSizeImgIsLoaded ? "opacity-100" : "opacity-0"
+        }`}
+        src={albumImage.image.cloudinary_public_id}
+        {...openedDimensions}
+        onLoad={() => setFullSizeImgIsLoaded(true)}
+        alt=""
+        loading="lazy"
+      />
+      {/* ) : null} */}
     </div>
   );
 };
