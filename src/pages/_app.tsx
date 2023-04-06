@@ -63,7 +63,8 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <Component {...pageProps} />
       </SessionProvider>
       <ToastContainer
-        autoClose={3000}
+        autoClose={2000}
+        closeButton={false}
         hideProgressBar
         position="bottom-right"
         transition={Slide}
