@@ -25,7 +25,11 @@ const Image = ({
         height: windowSize.height,
         width: windowSize.width,
       },
-      maxDecimal: { width: 0.85, height: 0.8 },
+      maxDecimal: {
+        width:
+          windowSize.width > 850 ? 0.9 : windowSize.width > 600 ? 0.85 : 0.8,
+        height: 0.8,
+      },
     },
   });
 

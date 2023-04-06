@@ -9,7 +9,7 @@ import { calcImgHeightForWidth } from "~/helpers/transformation";
 import { AlbumImageProvider, useAlbumContext } from "../_context";
 import OpenedImage from "./swiper-image/Entry";
 
-// □ can make so no scroll to transition on open up swiper
+// □ could make so no scroll to transition on open up swiper
 
 const ImagesSwiper = ({
   imageIndex,
@@ -68,8 +68,9 @@ const ImagesSwiper = ({
 
   return (
     <Transition show={typeof imageIndex === "number"} as={Fragment}>
-      <Dialog as="div" onClose={closeSwiper} className="fixed inset-0 z-30">
+      <Dialog onClose={closeSwiper} className="fixed inset-0 z-30 ">
         <Transition.Child
+          as="div"
           className="bg-white"
           enter="ease-out duration-500"
           enterFrom="opacity-0 scale-95"
@@ -114,7 +115,7 @@ const ImagesSwiper = ({
 
         <TransitionChildFadeInOut>
           <button
-            className="fixed left-3 top-1/2 z-40 -translate-y-1/2 text-3xl text-gray-400 transition-colors duration-75 ease-in-out hover:text-gray-600"
+            className="fixed left-0.5 top-1/2 z-40 -translate-y-1/2 text-3xl text-gray-400 transition-colors duration-75 ease-in-out hover:text-gray-600 sm:left-1 md:left-3"
             onClick={showPreviousImg}
             type="button"
           >
@@ -124,7 +125,7 @@ const ImagesSwiper = ({
 
         <TransitionChildFadeInOut>
           <button
-            className="fixed right-3 top-1/2 z-40 -translate-y-1/2 text-3xl text-gray-400 transition-colors duration-75 ease-in-out hover:text-gray-600"
+            className="fixed right-0.5 top-1/2 z-40 -translate-y-1/2 text-3xl text-gray-400 transition-colors duration-75 ease-in-out hover:text-gray-600 sm:right-1 md:right-3"
             onClick={showNextImg}
             type="button"
           >
