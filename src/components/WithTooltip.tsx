@@ -20,6 +20,16 @@ export type Props = {
   type?: "info" | "action" | "extended-info";
 };
 
+function isTouchDevice() {
+  return (
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0 ||
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    navigator.msMaxTouchPoints > 0
+  );
+}
+
 const WithTooltip = ({
   children,
   placement = "auto",
@@ -31,7 +41,7 @@ const WithTooltip = ({
   const { getTooltipProps, setTooltipRef, setTriggerRef, visible } =
     usePopperTooltip({ delayShow: 500, placement, offset: [0, yOffset] });
 
-  const show = visible && !isDisabled;
+  const show = visible && !isDisabled && !isTouchDevice();
 
   return (
     <>
@@ -42,7 +52,7 @@ const WithTooltip = ({
       {show
         ? createPortal(
             <div
-              className={`z-50 whitespace-nowrap rounded-sm font-sans text-sm transition-opacity duration-75 ease-in-out ${
+              className={`z-50 whitespace-nowrap rounded-sm  font-sans text-sm transition-opacity duration-75 ease-in-out ${
                 !show ? "invisible opacity-0" : "visible opacity-100"
               }`}
               {...getTooltipProps()}
@@ -61,7 +71,7 @@ const WithTooltip = ({
                   {text}
                 </div>
               ) : (
-                <div className="flex w-[30ch] flex-col gap-xxs whitespace-normal border border-gray-600 bg-[#fafafa] py-0.5 px-2 text-left text-gray-700">
+                <div className="gap-xxs flex w-[30ch] flex-col whitespace-normal border border-gray-600 bg-[#fafafa] py-0.5 px-2 text-left text-gray-700">
                   <p className="font-medium capitalize">{text.header}</p>
                   <p className="text-gray-600">{text.body}</p>
                 </div>

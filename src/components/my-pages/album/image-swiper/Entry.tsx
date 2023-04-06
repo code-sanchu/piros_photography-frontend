@@ -105,7 +105,7 @@ const ImagesSwiper = ({
 
         <TransitionChildFadeInOut>
           <button
-            className="fixed right-3 top-3 text-sm"
+            className="fixed right-3 top-3 font-sans-secondary text-sm tracking-wide"
             onClick={closeSwiper}
             type="button"
           >
@@ -114,23 +114,19 @@ const ImagesSwiper = ({
         </TransitionChildFadeInOut>
 
         <TransitionChildFadeInOut>
-          <button
-            className="fixed left-0.5 top-1/2 z-40 -translate-y-1/2 text-3xl text-gray-400 transition-colors duration-75 ease-in-out hover:text-gray-600 sm:left-1 md:left-3"
+          <CycleImgButton
+            icon={<CaretLeftIcon />}
             onClick={showPreviousImg}
-            type="button"
-          >
-            <CaretLeftIcon />
-          </button>
+            xPosClass="left-0.5 sm:left-1 md:left-3"
+          />
         </TransitionChildFadeInOut>
 
         <TransitionChildFadeInOut>
-          <button
-            className="fixed right-0.5 top-1/2 z-40 -translate-y-1/2 text-3xl text-gray-400 transition-colors duration-75 ease-in-out hover:text-gray-600 sm:right-1 md:right-3"
+          <CycleImgButton
+            icon={<CaretRightIcon />}
             onClick={showNextImg}
-            type="button"
-          >
-            <CaretRightIcon />
-          </button>
+            xPosClass="right-0.5 sm:right-1 md:right-3"
+          />
         </TransitionChildFadeInOut>
       </Dialog>
     </Transition>
@@ -139,9 +135,31 @@ const ImagesSwiper = ({
 
 export default ImagesSwiper;
 
+const CycleImgButton = ({
+  icon,
+  onClick,
+  xPosClass,
+}: {
+  icon: ReactElement;
+  onClick: () => void;
+  xPosClass: string;
+}) => {
+  return (
+    <button
+      className={`fixed top-1/2 z-40 inline-block -translate-y-1/2 text-3xl text-gray-400 transition-colors duration-75 ease-in-out hover:text-gray-600 ${xPosClass}`}
+      onClick={onClick}
+      type="button"
+    >
+      {icon}
+    </button>
+  );
+};
+
 const TransitionChildFadeInOut = ({ children }: { children: ReactElement }) => {
   return (
     <Transition.Child
+      as="span"
+      className="inline-block"
       enter="ease-out duration-500"
       enterFrom="opacity-0 "
       enterTo="opacity-100"

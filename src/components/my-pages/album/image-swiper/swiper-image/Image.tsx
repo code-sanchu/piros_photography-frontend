@@ -15,6 +15,9 @@ const Image = ({
   const albumImage = useAlbumImageContext();
   const windowSize = useWindowSize();
 
+  const imageWidthOpened =
+    windowSize.width > 850 ? 0.9 : windowSize.width > 600 ? 0.85 : 0.8;
+
   const openedDimensions = calcDimensions({
     initialDimensions: {
       height: albumImage.image.naturalHeight,
@@ -26,8 +29,7 @@ const Image = ({
         width: windowSize.width,
       },
       maxDecimal: {
-        width:
-          windowSize.width > 850 ? 0.9 : windowSize.width > 600 ? 0.85 : 0.8,
+        width: imageWidthOpened,
         height: 0.8,
       },
     },

@@ -24,8 +24,12 @@ const OpenedImage = ({
   return (
     <div className="relative grid h-[100vh] w-screen place-items-center overflow-y-auto py-8 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
       <div className="flex flex-col gap-2">
-        <Image unopenedDimensions={unopenedDimensions} />
-        <DescriptionAndUserInteractivity />
+        <div className="flex justify-center">
+          <Image unopenedDimensions={unopenedDimensions} />
+        </div>
+        <div className="flex justify-center">
+          <DescriptionAndUserInteractivity />
+        </div>
       </div>
     </div>
   );
@@ -98,38 +102,40 @@ const DescriptionAndUserInteractivity = () => {
   }, [commentsMeasurements?.height]);
 
   return (
-    <>
-      <div className="mt-4 flex flex-col gap-2">
-        <TopBar
-          commentsIconAndCount={
-            <CommentsIconAndCount
-              isOpen={commentsIsOpen}
-              toggleIsOpen={commentsIsOpen ? closeComments : openComments}
-            />
-          }
-          descriptionButton={
-            <DescriptionButton
-              isOpen={descriptionIsOpen}
-              toggleIsOpen={
-                descriptionIsOpen ? closeDescription : openDescription
-              }
-            />
-          }
-        />
-        <animated.div style={{ overflowY: "hidden", ...descriptionSprings }}>
+    <div className="flex w-full min-w-[80vw] justify-center md:min-w-[720px]">
+      <div className="w-full ">
+        <div className="mt-4 flex flex-col gap-2">
+          <TopBar
+            commentsIconAndCount={
+              <CommentsIconAndCount
+                isOpen={commentsIsOpen}
+                toggleIsOpen={commentsIsOpen ? closeComments : openComments}
+              />
+            }
+            descriptionButton={
+              <DescriptionButton
+                isOpen={descriptionIsOpen}
+                toggleIsOpen={
+                  descriptionIsOpen ? closeDescription : openDescription
+                }
+              />
+            }
+          />
+          <animated.div style={{ overflowY: "hidden", ...descriptionSprings }}>
+            <DescriptionText />
+          </animated.div>
+          <animated.div style={{ overflowY: "hidden", ...commentsSprings }}>
+            <CommentFormAndComments closeComments={closeComments} />
+          </animated.div>
+        </div>
+        <div className="invisible fixed -z-10" ref={descriptionDummyRef}>
           <DescriptionText />
-        </animated.div>
-        <animated.div style={{ overflowY: "hidden", ...commentsSprings }}>
+        </div>
+        <div className="invisible fixed -z-10" ref={commentsDummyRef}>
           <CommentFormAndComments closeComments={closeComments} />
-        </animated.div>
+        </div>
       </div>
-      <div className="invisible fixed -z-10" ref={descriptionDummyRef}>
-        <DescriptionText />
-      </div>
-      <div className="invisible fixed -z-10" ref={commentsDummyRef}>
-        <CommentFormAndComments closeComments={closeComments} />
-      </div>
-    </>
+    </div>
   );
 };
 
