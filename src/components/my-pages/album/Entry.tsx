@@ -9,8 +9,6 @@ import ImagesSwiper from "./image-swiper/Entry";
 import AlbumImage from "./image/Entry";
 import { type StaticData } from "./staticData";
 
-// ! td: pass initial img dimensions to swiper
-
 const AlbumPage = ({ albumId }: StaticData) => {
   const { data } = api.album.albumPageGetOne.useQuery(
     { albumId },
@@ -52,9 +50,16 @@ const Titles = () => {
 
   return (
     <>
-      <h1 className="text-6xl md:text-7xl">{album.title}</h1>
+      <h1 className="font-sans-secondary font-medium uppercase tracking-wider">
+        <span className="text-3xl">{album.title?.slice(0, 1)}</span>
+        <span className="text-2xl">
+          {album.title?.slice(1, album.title.length)}
+        </span>
+      </h1>
       {album.description ? (
-        <p className="mt-4 max-w-[700px] font-serif">{album.description}</p>
+        <p className="mt-3 max-w-[700px] font-serif-3 text-xl tracking-wide text-gray-900">
+          {album.description}
+        </p>
       ) : null}
     </>
   );
