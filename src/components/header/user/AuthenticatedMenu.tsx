@@ -1,12 +1,12 @@
 import { Fragment, type ReactElement } from "react";
 import NextImage from "next/image";
+import Link from "next/link";
 import { Menu, Transition } from "@headlessui/react";
 import { signOut, useSession } from "next-auth/react";
 
 import WithTooltip from "~/components/WithTooltip";
 import {
   SignOutIcon,
-  UserCommentIcon,
   UserIcon,
   UserManageAccountIcon,
 } from "~/components/icon";
@@ -15,7 +15,7 @@ import {
 
 const AuthenticatedMenu = () => {
   return (
-    <div className="relative">
+    <div className="sm:relative">
       <Menu>
         <Menu.Button>
           <ButtonContent />
@@ -30,7 +30,7 @@ const AuthenticatedMenu = () => {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items
-            className={`absolute right-0 z-50 w-[350px] origin-top-right rounded-lg bg-white shadow-lg  focus:outline-none`}
+            className={`absolute left-1/2 z-50 w-[350px] max-w-[95vw] origin-top-right -translate-x-1/2 rounded-lg bg-white shadow-lg focus:outline-none sm:-translate-x-full`}
           >
             <PanelContent />
           </Menu.Items>
@@ -90,16 +90,17 @@ const PanelContent = () => {
         </div>
       </div>
       <div className="mt-6 ml-[68px] flex flex-col gap-4">
-        <MenuItem
+        {/*         <MenuItem
           icon={<UserCommentIcon weight="light" />}
           text="My comments"
           onClick={() => null}
-        />
-        <MenuItem
-          icon={<UserManageAccountIcon weight="light" />}
-          text="Manage account"
-          onClick={() => null}
-        />
+        /> */}
+        <Link href={`/user/${sessionData.user.id}`} passHref>
+          <MenuItem
+            icon={<UserManageAccountIcon weight="light" />}
+            text="Manage account"
+          />
+        </Link>
         <MenuItem
           icon={<SignOutIcon weight="light" />}
           text="Sign out"
@@ -117,12 +118,12 @@ const MenuItem = ({
 }: {
   icon: ReactElement;
   text: string;
-  onClick: () => void;
+  onClick?: () => void;
 }) => {
   return (
     <div
       className="flex cursor-pointer items-center gap-7 rounded-lg py-1 px-4 hover:bg-gray-100"
-      onClick={onClick}
+      onClick={() => onClick && onClick()}
     >
       <div className="text-2xl text-gray-400">{icon}</div>
       <div className="text-sm font-light text-gray-500">{text}</div>

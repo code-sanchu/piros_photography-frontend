@@ -202,7 +202,7 @@ const UserCommentMenu = ({
     <div className="relative">
       <MyMenu
         button={
-          <div className="text-2xl text-gray-300 hover:!text-gray-700 group-hover/comment:text-gray-500">
+          <div className="text-2xl text-gray-300 group-hover/comment:text-gray-500 hover:!text-gray-700">
             <UserMenuIcon weight="bold" />
           </div>
         }
@@ -304,7 +304,7 @@ const AdminMenu = () => {
       <MyMenu
         button={
           <WithTooltip text="admin menu">
-            <div className="text-xl text-gray-300 hover:!text-gray-700 group-hover/comment:text-gray-500">
+            <div className="text-xl text-gray-300 group-hover/comment:text-gray-500 hover:!text-gray-700">
               <AdminIcon />
             </div>
           </WithTooltip>
@@ -384,3 +384,61 @@ const AdminDeleteCommentModal = ({
     />
   );
 };
+
+/* const AdminBanUserModal = ({
+  button,
+}: {
+  button: (arg0: { openModal: () => void }) => ReactElement;
+}) => {
+  const album = useAlbumContext();
+  const comment = useAlbumImageComment();
+
+  const { refetch: refetchAlbum } = api.album.albumPageGetOne.useQuery(
+    { albumId: album.id },
+    { enabled: false },
+  );
+
+  const banUserMutation = api.user.banUser.useMutation({
+    async onSuccess() {
+      await refetchAlbum();
+
+      toast(<Toast text="Banned user" type="success" />);
+    },
+    onError: () => {
+      toast(<Toast text="Error banning user" type="error" />);
+    },
+  });
+
+  return (
+    <Modal
+      button={button}
+      panelContent={({ closeModal }) => (
+        <div className="min-w-[350px] max-w-xl rounded-lg border bg-white p-4 shadow-lg">
+          <h4>Ban user</h4>
+          <p className="mt-4 text-sm text-gray-400">
+            Use admin privileges to ban user?
+          </p>
+          <div className="mt-8 flex  items-center justify-between">
+            <button
+              className="my-btn my-btn-neutral"
+              type="button"
+              onClick={closeModal}
+            >
+              Cancel
+            </button>
+            <button
+              className="my-btn my-btn-action"
+              onClick={() => {
+                banUserMutation.mutate({ userId: comment.userId });
+              }}
+              type="button"
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      )}
+    />
+  );
+};
+ */

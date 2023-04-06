@@ -50,9 +50,13 @@ const Titles = () => {
 
   return (
     <div>
-      <h1 className="text-6xl md:text-7xl">{pageText.title}</h1>
+      <h1 className="font-sans-secondary text-6xl font-light tracking-wide  md:text-7xl">
+        {pageText.title}
+      </h1>
       {pageText.subTitle?.length ? (
-        <h3 className="font-serif text-2xl md:text-4xl">{pageText.subTitle}</h3>
+        <h3 className="mt-3 max-w-[700px] font-serif-3 text-xl tracking-wide">
+          {pageText.subTitle}
+        </h3>
       ) : null}
     </div>
   );
@@ -92,9 +96,12 @@ const Album = ({ album }: { album: Album }) => {
 
               return (
                 <Fragment key={i}>
-                  <div className=" text-gray-700 transition-colors duration-75 ease-in-out group-hover/album:text-gray-900 xs:text-lg">
-                    {album.title}
-                  </div>
+                  <h1 className="font-sans-secondary uppercase tracking-wider">
+                    <span className="text-xl">{album.title?.slice(0, 1)}</span>
+                    <span className="text-lg">
+                      {album.title?.slice(1, album.title.length)}
+                    </span>
+                  </h1>
                   <div className="mt-1" style={{ height }}>
                     <MyCldImage
                       dimensions={{

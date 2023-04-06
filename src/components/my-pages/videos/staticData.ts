@@ -13,7 +13,7 @@ export async function getStaticProps() {
     ctx: createInnerTRPCContext({ session: null }),
     transformer: superjson,
   });
-  await ssg.videos.videosPageGetAll.prefetch();
+  await ssg.video.videosPageGetAll.prefetch();
 
   return {
     props: {

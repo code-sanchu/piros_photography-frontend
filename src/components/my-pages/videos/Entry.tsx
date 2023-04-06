@@ -36,13 +36,15 @@ const Layout = ({ children }: { children: ReactElement | ReactElement[] }) => {
 const Titles = () => {
   return (
     <div>
-      <h1 className="text-6xl sm:text-7xl">Videos</h1>
-      <p className="mt-2 font-serif text-gray-500 md:mt-4">
+      <h1 className="font-sans-secondary text-6xl font-light tracking-wide  md:text-7xl">
+        Videos
+      </h1>
+      <p className=" mt-2 font-serif-3 text-lg">
         See more on youtube{" "}
         <a
           href="https://www.youtube.com/playlist?list=PLdAjHO5OZG7y9CGvEG3Cf3ZgcaCL_p9fZ"
           target="_blank"
-          className="text-gray-700 transition-colors duration-75 ease-in-out hover:text-gray-900"
+          className="transition-colors duration-75 ease-in-out hover:text-gray-900"
         >
           @piroska markus
         </a>
@@ -52,7 +54,7 @@ const Titles = () => {
 };
 
 const Videos = () => {
-  const { data } = api.videos.videosPageGetAll.useQuery(undefined, {
+  const { data } = api.video.videosPageGetAll.useQuery(undefined, {
     enabled: false,
   });
   const videos = data as Video[];
@@ -72,10 +74,15 @@ const Video = ({ video }: { video: Video }) => {
   return (
     <div>
       {video.title?.length ? (
-        <h2 className="mb-2 text-xl">{video.title}</h2>
+        <h2 className="font-sans-secondary uppercase tracking-wider">
+          <span className="text-xl">{video.title?.slice(0, 1)}</span>
+          <span className="text-lg">
+            {video.title?.slice(1, video.title.length)}
+          </span>
+        </h2>
       ) : null}
       {video.description?.length ? (
-        <p className="mb-2 font-serif">{video.description}</p>
+        <p className="mb-2 font-serif-3 text-lg">{video.description}</p>
       ) : null}
       <div className="aspect-video" ref={containerRef}>
         {containerMeasurements?.width ? (

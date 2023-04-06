@@ -51,13 +51,13 @@ const Titles = () => {
   return (
     <>
       <h1 className="font-sans-secondary font-medium uppercase tracking-wider">
-        <span className="text-3xl">{album.title?.slice(0, 1)}</span>
-        <span className="text-2xl">
+        <span className="text-2xl sm:text-3xl">{album.title?.slice(0, 1)}</span>
+        <span className="text-xl sm:text-2xl">
           {album.title?.slice(1, album.title.length)}
         </span>
       </h1>
       {album.description ? (
-        <p className="mt-3 max-w-[700px] font-serif-3 text-xl tracking-wide text-gray-900">
+        <p className="mt-3 max-w-[700px] font-serif-3 text-lg tracking-wide text-gray-900 sm:text-xl">
           {album.description}
         </p>
       ) : null}

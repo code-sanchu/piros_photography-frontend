@@ -24,7 +24,8 @@
       "~/albums/*": ["src/components/my-pages/albums/*"],
       "~/album/*": ["src/components/my-pages/album/*"],
       "~/videos/*": ["src/components/my-pages/videos/*"],
-      "~/about/*": ["src/components/my-pages/about/*"]
+      "~/about/*": ["src/components/my-pages/about/*"],
+      "~/user/*": ["src/components/my-pages/user/*"]
     }
   },
   "include": [

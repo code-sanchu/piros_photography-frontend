@@ -1,3 +1,3 @@
 import { type RouterOutputs } from "~/utils/api";
 
-export type Video = RouterOutputs["videos"]["videosPageGetAll"][0];
+export type Video = RouterOutputs["video"]["videosPageGetAll"][0];
