@@ -24,7 +24,7 @@ export default AlbumsPage;
 const Layout = ({ children }: { children: ReactElement | ReactElement[] }) => {
   return (
     <div className="min-h-screen overflow-x-hidden">
-      <Header color="white" />
+      <Header color="white" hideLogoAndUserMenuWhenClosed />
       {children}
     </div>
   );

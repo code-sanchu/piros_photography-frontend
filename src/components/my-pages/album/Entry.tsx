@@ -1,4 +1,5 @@
 import { useState, type ReactElement } from "react";
+import { useMeasure } from "@react-hookz/web";
 
 import { api } from "~/utils/api";
 import Header from "~/components/header/Entry";
@@ -64,6 +65,9 @@ const Images = () => {
 
   const album = useAlbumContext();
 
+  const [imageContainerMeasurements, imageContainerRef] =
+    useMeasure<HTMLDivElement>();
+
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:gap-12">
@@ -72,17 +76,21 @@ const Images = () => {
             <div
               className="cursor-pointer"
               onClick={() => setSwiperImageIndex(i)}
+              ref={imageContainerRef}
             >
               <AlbumImage />
             </div>
           </AlbumImageProvider>
         ))}
       </div>
-      <ImagesSwiper
-        closeSwiper={() => setSwiperImageIndex(null)}
-        imageIndex={swiperImageIndex}
-        setImageIndex={setSwiperImageIndex}
-      />
+      {imageContainerMeasurements ? (
+        <ImagesSwiper
+          closeSwiper={() => setSwiperImageIndex(null)}
+          imageIndex={swiperImageIndex}
+          setImageIndex={setSwiperImageIndex}
+          unopenedImageContainerWidth={imageContainerMeasurements.height}
+        />
+      ) : null}
     </>
   );
 };

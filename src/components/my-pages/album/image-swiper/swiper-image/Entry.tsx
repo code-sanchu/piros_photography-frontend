@@ -22,7 +22,7 @@ const OpenedImage = ({
   unopenedDimensions: { width: number; height: number };
 }) => {
   return (
-    <div className="relative grid h-[100vh] w-screen place-items-center overflow-y-auto pt-16 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
+    <div className="relative grid h-[100vh] w-screen place-items-center overflow-y-auto py-8 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
       <div className="flex flex-col gap-2">
         <Image unopenedDimensions={unopenedDimensions} />
         <DescriptionAndUserInteractivity />

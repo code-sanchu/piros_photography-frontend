@@ -6,10 +6,10 @@ import UserMenu from "./user/Entry";
 
 const Header = ({
   color = "black",
-  isLanding,
+  hideLogoAndUserMenuWhenClosed: isLanding,
 }: {
   color?: "black" | "white";
-  isLanding?: true;
+  hideLogoAndUserMenuWhenClosed?: true;
 }) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 

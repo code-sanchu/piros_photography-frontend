@@ -11,7 +11,7 @@ const HomePage = () => {
   return (
     <SiteLayout>
       <>
-        <Header isLanding />
+        <Header hideLogoAndUserMenuWhenClosed />
         <PageContent />
       </>
     </SiteLayout>

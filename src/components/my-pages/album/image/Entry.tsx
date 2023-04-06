@@ -55,30 +55,3 @@ const OnContainerMeasurementsReady = (imageDimensions: {
     />
   );
 };
-
-/* const OnContainerMeasurementsReadyOLD = (imageDimensions: {
-  width: number;
-  height: number;
-}) => {
-  const albumImage = useAlbumImageContext();
-
-  return (
-    <Modal
-      button={({ openModal }) => (
-        <div className="h-full cursor-pointer" onClick={openModal}>
-          <MyCldImage
-            dimensions={imageDimensions}
-            src={albumImage.image.cloudinary_public_id}
-          />
-        </div>
-      )}
-      panelContent={({ closeModal }) => (
-        <OpenedImage unopenedDimensions={imageDimensions} />
-      )}
-      styles={{
-        bg: "bg-white",
-      }}
-    />
-  );
-};
- */
