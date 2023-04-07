@@ -4,6 +4,7 @@ import { useMeasure } from "@react-hookz/web";
 import { api } from "~/utils/api";
 import YoutubeIFrame from "~/components/YoutubeIframe";
 import Header from "~/components/header/Entry";
+import { SpinnerIcon } from "~/components/icon";
 import SiteLayout from "~/components/layout/Site";
 import { getYoutubeEmbedUrlFromId } from "~/helpers/youtube";
 import { type Video } from "./_types";
@@ -86,14 +87,19 @@ const Video = ({ video }: { video: Video }) => {
           {video.description}
         </p>
       ) : null}
-      <div className="aspect-video" ref={containerRef}>
-        {containerMeasurements?.width ? (
-          <YoutubeIFrame
-            height={containerMeasurements.height}
-            src={getYoutubeEmbedUrlFromId(video.youtubeVideoId)}
-            width={containerMeasurements.width}
-          />
-        ) : null}
+      <div className="relative aspect-video bg-gray-100" ref={containerRef}>
+        <div className="my-abs-center">
+          <SpinnerIcon />
+        </div>
+        <div className="absolute left-0 top-0 z-10 h-full w-full">
+          {containerMeasurements?.width ? (
+            <YoutubeIFrame
+              height={containerMeasurements.height}
+              src={getYoutubeEmbedUrlFromId(video.youtubeVideoId)}
+              width={containerMeasurements.width}
+            />
+          ) : null}
+        </div>
       </div>
     </div>
   );

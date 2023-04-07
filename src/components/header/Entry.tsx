@@ -295,7 +295,7 @@ const PageLink = ({ href, text }: { href: string; text: string }) => {
 
 const SocialLinks = () => {
   return (
-    <div className="flex gap-6 text-sm sm:gap-8 sm:text-base">
+    <div className="flex gap-6 text-sm font-light sm:gap-8 sm:text-base">
       <div className="flex flex-col gap-5 font-sans-secondary sm:gap-6">
         <p className="text-gray-400">contact</p>
         <p className="text-gray-400">facebook</p>

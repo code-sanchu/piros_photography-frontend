@@ -2,9 +2,9 @@ import { useMeasure } from "@react-hookz/web";
 
 import MyCldImage from "~/components/image/MyCldImage";
 import { calcImgHeightForWidth } from "~/helpers/transformation";
-import { useAlbumImageContext } from "../_context";
+import { useAlbumImageContext } from "./_context";
 
-const AlbumImage = () => {
+const Image = () => {
   const albumImage = useAlbumImageContext();
 
   const [containerMeasurements, containerRef] = useMeasure<HTMLDivElement>();
@@ -40,7 +40,7 @@ const AlbumImage = () => {
   );
 };
 
-export default AlbumImage;
+export default Image;
 
 const OnContainerMeasurementsReady = (imageDimensions: {
   width: number;
