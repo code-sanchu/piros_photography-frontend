@@ -92,7 +92,7 @@ const MainImage = () => {
 };
 
 const MainTitle = () => (
-  <h1 className="absolute top-[35%] -left-[3vw] text-5xl font-medium tracking-wider xs:text-6xl xl:text-7xl 2xl:text-8xl">
+  <h1 className="absolute top-[35%] -left-[3vw] text-4xl font-medium tracking-wider xs:text-5xl sm:text-6xl xl:text-7xl 2xl:text-8xl">
     Piros <br />
     Photography
   </h1>

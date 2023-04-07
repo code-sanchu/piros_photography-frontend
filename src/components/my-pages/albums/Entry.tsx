@@ -32,7 +32,9 @@ const PageLayout = ({
   <div className="min-h-screen overflow-x-hidden">
     <Header />
     <div className="mt-20 flex justify-center md:mt-28">
-      <div className="w-full max-w-[1800px] p-4 xs:p-6 sm:p-8">{children}</div>
+      <div className="w-full max-w-[1800px] px-4 xs:px-6 sm:px-8">
+        {children}
+      </div>
     </div>
   </div>
 );

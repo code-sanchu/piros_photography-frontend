@@ -12,7 +12,7 @@ const VideosPage = () => (
   <SiteLayout pageTitle="Videos - Piros Photography">
     <PageLayout>
       <Titles />
-      <div className="mt-8 md:mt-12">
+      <div className="mt-6 pb-12 sm:mt-8 md:mt-12">
         <Videos />
       </div>
     </PageLayout>
@@ -28,8 +28,8 @@ const PageLayout = ({
 }) => (
   <div className="min-h-screen overflow-x-hidden">
     <Header />
-    <div className="mt-20 flex justify-center md:mt-28">
-      <div className="w-full max-w-[1200px] xs:p-6 sm:p-8">{children}</div>
+    <div className="mt-24 flex justify-center px-4 xs:px-6 sm:px-8 md:mt-28">
+      <div className="w-full max-w-[1200px]">{children}</div>
     </div>
   </div>
 );
@@ -40,7 +40,7 @@ const Titles = () => (
       <span className="text-5xl md:text-6xl">V</span>
       <span className="text-4xl md:text-5xl">ideos</span>
     </h1>
-    <p className=" mt-12 font-light">
+    <p className="mt-6 text-sm font-light sm:mt-8 sm:text-base md:mt-12">
       Youtube{" "}
       <a
         href="https://www.youtube.com/playlist?list=PLdAjHO5OZG7y9CGvEG3Cf3ZgcaCL_p9fZ"
@@ -60,7 +60,7 @@ const Videos = () => {
   const videos = data as Video[];
 
   return (
-    <div className="flex flex-col gap-12">
+    <div className="flex flex-col gap-8 sm:gap-10 md:gap-12">
       {videos.map((video) => (
         <Video video={video} key={video.id} />
       ))}

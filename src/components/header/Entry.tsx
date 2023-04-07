@@ -295,13 +295,13 @@ const PageLink = ({ href, text }: { href: string; text: string }) => {
 
 const SocialLinks = () => {
   return (
-    <div className="flex gap-8">
-      <div className="flex flex-col gap-6">
+    <div className="flex gap-6 text-sm sm:gap-8 sm:text-base">
+      <div className="flex flex-col gap-5 font-sans-secondary sm:gap-6">
         <p className="text-gray-400">contact</p>
         <p className="text-gray-400">facebook</p>
         <p className="text-gray-400">youtube</p>
       </div>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-5 font-sans-secondary sm:gap-6">
         <a href="mailto:pirospixs@gmail.com" target="_blank">
           pirospixs@gmail.com
         </a>
