@@ -15,7 +15,7 @@ const AlbumsPage = () => (
   <SiteLayout pageTitle="Albums - Piros Photography">
     <PageLayout>
       <Titles />
-      <div className="mt-8 md:mt-12">
+      <div className="mt-8 pb-24 md:mt-12">
         <Albums />
       </div>
     </PageLayout>

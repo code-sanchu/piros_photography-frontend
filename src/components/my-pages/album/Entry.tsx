@@ -24,7 +24,7 @@ const AlbumPage = ({ albumId }: StaticData) => {
         <AlbumProvider album={album}>
           <>
             <Titles />
-            <div className="mt-10">
+            <div className="mt-10 pb-24">
               <Images />
             </div>
           </>

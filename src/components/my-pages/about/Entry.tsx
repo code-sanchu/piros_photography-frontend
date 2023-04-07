@@ -5,25 +5,32 @@ import NextImage from "next/image";
 
 import { api, type RouterOutputs } from "~/utils/api";
 import Header from "~/components/header/Entry";
+import SiteLayout from "~/components/layout/Site";
 import { localImage } from "~/assets/images";
 
 type PageText = NonNullable<RouterOutputs["aboutPage"]["getText"]>;
 
 const AlbumsPage = () => {
   return (
-    <Layout>
-      <BannerImage />
-      <SocialLinks />
-      <MainText />
-    </Layout>
+    <SiteLayout>
+      <PageLayout>
+        <BannerImage />
+        <SocialLinks />
+        <MainText />
+      </PageLayout>
+    </SiteLayout>
   );
 };
 
 export default AlbumsPage;
 
-const Layout = ({ children }: { children: ReactElement | ReactElement[] }) => {
+const PageLayout = ({
+  children,
+}: {
+  children: ReactElement | ReactElement[];
+}) => {
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden pb-24">
       <Header color="white" hideLogo hideUserMenu />
       {children}
     </div>
