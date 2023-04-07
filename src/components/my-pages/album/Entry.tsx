@@ -67,8 +67,17 @@ const Titles = () => {
   );
 };
 
+export type ImageSwiper = {
+  status: "open" | "closed" | "opening";
+  // status: "open" | "closed" | "opening" | "closing";
+  index: number;
+};
+
 const Images = () => {
-  const [swiperImageIndex, setSwiperImageIndex] = useState<number | null>(null);
+  const [imageSwiper, setImageSwiper] = useState<ImageSwiper>({
+    status: "closed",
+    index: 0,
+  });
 
   const album = useAlbumContext();
 
@@ -82,7 +91,7 @@ const Images = () => {
           <AlbumImageProvider albumImage={albumImage} key={albumImage.id}>
             <div
               className="cursor-pointer"
-              onClick={() => setSwiperImageIndex(i)}
+              onClick={() => setImageSwiper({ status: "opening", index: i })}
               ref={imageContainerRef}
             >
               <Image />
@@ -92,9 +101,8 @@ const Images = () => {
       </div>
       {imageContainerMeasurements ? (
         <ImagesSwiper
-          closeSwiper={() => setSwiperImageIndex(null)}
-          imageIndex={swiperImageIndex}
-          setImageIndex={setSwiperImageIndex}
+          imageSwiper={imageSwiper}
+          setImageSwiper={setImageSwiper}
           unopenedImageContainerWidth={imageContainerMeasurements.height}
         />
       ) : null}

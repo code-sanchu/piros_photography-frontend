@@ -6,22 +6,23 @@ import { animated, useSpring } from "@react-spring/web";
 import DetectSwipe from "~/components/DetectSwipe";
 import { CaretLeftIcon, CaretRightIcon } from "~/components/icon";
 import { calcImgHeightForWidth } from "~/helpers/transformation";
+import { type ImageSwiper } from "../Entry";
 import { AlbumImageProvider, useAlbumContext } from "../_context";
 import SwiperImage from "./swiper-image/Entry";
 
 // □ could make so no scroll to transition on open up swiper
 
 const ImagesSwiper = ({
-  imageIndex,
-  setImageIndex,
-  closeSwiper,
+  imageSwiper,
+  setImageSwiper,
   unopenedImageContainerWidth,
 }: {
-  imageIndex: number | null;
-  setImageIndex: (index: number) => void;
-  closeSwiper: () => void;
+  imageSwiper: ImageSwiper;
+  setImageSwiper: (imageSwiper: ImageSwiper) => void;
   unopenedImageContainerWidth: number;
+  // isOpen: boolean
 }) => {
+  console.log("imageSwiper:", imageSwiper);
   const album = useAlbumContext();
 
   const windowSize = useWindowSize();
@@ -29,7 +30,7 @@ const ImagesSwiper = ({
   const [springs, springApi] = useSpring(() => ({
     config: { tension: 280, friction: 60 },
     from: {
-      translateX: -(windowSize.width * (imageIndex || 0)),
+      translateX: -(windowSize.width * (imageSwiper.index || 0)),
     },
   }));
 
@@ -40,35 +41,46 @@ const ImagesSwiper = ({
   };
 
   useEffect(() => {
-    if (typeof imageIndex !== "number") {
+    if (imageSwiper.status === "closed") {
       return;
     }
-    animateToImg(imageIndex);
+    if (imageSwiper.status === "opening") {
+      springApi.start({
+        translateX: -(windowSize.width * imageSwiper.index),
+        immediate: true,
+      });
+      setImageSwiper({ ...imageSwiper, status: "open" });
+    } else if (imageSwiper.status === "open") {
+      animateToImg(imageSwiper.index);
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageIndex, windowSize.width]);
+  }, [imageSwiper, windowSize.width]);
 
   const showNextImg = () => {
-    if (imageIndex === null) {
-      return;
-    }
     const nextIndex =
-      imageIndex !== album.images.length - 1 ? imageIndex + 1 : 0;
-    setImageIndex(nextIndex);
+      imageSwiper.index !== album.images.length - 1 ? imageSwiper.index + 1 : 0;
+    setImageSwiper({ ...imageSwiper, index: nextIndex });
   };
 
   const showPreviousImg = () => {
-    if (imageIndex === null) {
-      return;
-    }
     const prevIndex =
-      imageIndex !== 0 ? imageIndex - 1 : album.images.length - 1;
-    setImageIndex(prevIndex);
+      imageSwiper.index !== 0 ? imageSwiper.index - 1 : album.images.length - 1;
+    setImageSwiper({ ...imageSwiper, index: prevIndex });
   };
 
   return (
-    <Transition show={typeof imageIndex === "number"} as={Fragment}>
-      <Dialog onClose={closeSwiper} className="fixed inset-0 z-30 ">
+    <Transition
+      show={imageSwiper.status === "opening" || imageSwiper.status === "open"}
+      as={Fragment}
+    >
+      <Dialog
+        onClose={() => setImageSwiper({ ...imageSwiper, status: "closed" })}
+        onAnimationEnd={() =>
+          setImageSwiper({ ...imageSwiper, status: "closed" })
+        }
+        className="fixed inset-0 z-30 "
+      >
         <Transition.Child
           as="div"
           className="bg-white"
@@ -106,7 +118,7 @@ const ImagesSwiper = ({
         <TransitionChildFadeInOut>
           <button
             className="fixed right-3 top-3 font-sans-secondary text-sm tracking-wide"
-            onClick={closeSwiper}
+            onClick={() => setImageSwiper({ ...imageSwiper, status: "closed" })}
             type="button"
           >
             close
