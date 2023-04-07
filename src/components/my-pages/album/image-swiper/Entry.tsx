@@ -7,7 +7,7 @@ import DetectSwipe from "~/components/DetectSwipe";
 import { CaretLeftIcon, CaretRightIcon } from "~/components/icon";
 import { calcImgHeightForWidth } from "~/helpers/transformation";
 import { AlbumImageProvider, useAlbumContext } from "../_context";
-import OpenedImage from "./swiper-image/Entry";
+import SwiperImage from "./swiper-image/Entry";
 
 // □ could make so no scroll to transition on open up swiper
 
@@ -84,7 +84,7 @@ const ImagesSwiper = ({
               {album.images.map((albumImage) => (
                 <div key={albumImage.id}>
                   <AlbumImageProvider albumImage={albumImage}>
-                    <OpenedImage
+                    <SwiperImage
                       unopenedDimensions={{
                         height: calcImgHeightForWidth({
                           containerWidth: unopenedImageContainerWidth,

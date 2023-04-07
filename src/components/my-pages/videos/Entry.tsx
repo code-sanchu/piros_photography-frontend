@@ -4,54 +4,54 @@ import { useMeasure } from "@react-hookz/web";
 import { api } from "~/utils/api";
 import YoutubeIFrame from "~/components/YoutubeIframe";
 import Header from "~/components/header/Entry";
+import SiteLayout from "~/components/layout/Site";
 import { getYoutubeEmbedUrlFromId } from "~/helpers/youtube";
 import { type Video } from "./_types";
 
-const VideosPage = () => {
-  return (
-    <Layout>
-      <div className="mt-8 sm:mt-12">
-        <Titles />
-      </div>
-      <div className="mt-6 sm:mt-12">
+const VideosPage = () => (
+  <SiteLayout pageTitle="Videos - Piros Photography">
+    <PageLayout>
+      <Titles />
+      <div className="mt-8 md:mt-12">
         <Videos />
       </div>
-    </Layout>
-  );
-};
+    </PageLayout>
+  </SiteLayout>
+);
 
 export default VideosPage;
 
-const Layout = ({ children }: { children: ReactElement | ReactElement[] }) => {
-  return (
-    <div className="min-h-screen overflow-x-hidden">
-      <Header />
-      <div className="mt-10 flex justify-center">
-        <div className="w-full max-w-[1200px] p-8">{children}</div>
-      </div>
+const PageLayout = ({
+  children,
+}: {
+  children: ReactElement | ReactElement[];
+}) => (
+  <div className="min-h-screen overflow-x-hidden">
+    <Header />
+    <div className="mt-20 flex justify-center md:mt-28">
+      <div className="w-full max-w-[1200px] xs:p-6 sm:p-8">{children}</div>
     </div>
-  );
-};
+  </div>
+);
 
-const Titles = () => {
-  return (
-    <div>
-      <h1 className="font-sans-secondary text-6xl font-light tracking-wide  md:text-7xl">
-        Videos
-      </h1>
-      <p className=" mt-2 font-serif-3 text-lg">
-        See more on youtube{" "}
-        <a
-          href="https://www.youtube.com/playlist?list=PLdAjHO5OZG7y9CGvEG3Cf3ZgcaCL_p9fZ"
-          target="_blank"
-          className="transition-colors duration-75 ease-in-out hover:text-gray-900"
-        >
-          @piroska markus
-        </a>
-      </p>
-    </div>
-  );
-};
+const Titles = () => (
+  <div>
+    <h1 className="uppercase tracking-wider">
+      <span className="text-5xl md:text-6xl">V</span>
+      <span className="text-4xl md:text-5xl">ideos</span>
+    </h1>
+    <p className=" mt-12 font-light">
+      Youtube{" "}
+      <a
+        href="https://www.youtube.com/playlist?list=PLdAjHO5OZG7y9CGvEG3Cf3ZgcaCL_p9fZ"
+        target="_blank"
+        className="text-blue-600 transition-colors duration-75 ease-in-out hover:text-blue-800"
+      >
+        @piroska markus
+      </a>
+    </p>
+  </div>
+);
 
 const Videos = () => {
   const { data } = api.video.videosPageGetAll.useQuery(undefined, {
@@ -74,7 +74,7 @@ const Video = ({ video }: { video: Video }) => {
   return (
     <div>
       {video.title?.length ? (
-        <h2 className="font-sans-secondary uppercase tracking-wider">
+        <h2 className="mb-2 font-sans-secondary text-base font-light tracking-wide">
           <span className="text-xl">{video.title?.slice(0, 1)}</span>
           <span className="text-lg">
             {video.title?.slice(1, video.title.length)}
@@ -82,7 +82,9 @@ const Video = ({ video }: { video: Video }) => {
         </h2>
       ) : null}
       {video.description?.length ? (
-        <p className="mb-2 font-serif-3 text-lg">{video.description}</p>
+        <p className="mb-4 -mt-0.5 font-serif-3 text-lg leading-6">
+          {video.description}
+        </p>
       ) : null}
       <div className="aspect-video" ref={containerRef}>
         {containerMeasurements?.width ? (

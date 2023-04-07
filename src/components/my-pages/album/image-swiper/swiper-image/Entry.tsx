@@ -17,7 +17,7 @@ import Image from "./Image";
 import LikesIconAndCount from "./Likes";
 import CommentFormAndComments from "./comment-form-and-comments/Entry";
 
-const OpenedImage = ({
+const SwiperImage = ({
   unopenedDimensions,
 }: {
   unopenedDimensions: { width: number; height: number };
@@ -36,7 +36,7 @@ const OpenedImage = ({
   );
 };
 
-export default OpenedImage;
+export default SwiperImage;
 
 const DescriptionAndUserInteractivity = () => {
   const albumImage = useAlbumImageContext();

@@ -1,46 +1,41 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { Fragment, type ReactElement } from "react";
+import { type ReactElement } from "react";
 import Link from "next/link";
-import { useMeasure } from "react-use";
 
-import { api, type RouterOutputs } from "~/utils/api";
+import { api } from "~/utils/api";
+import ContainerMeasurements from "~/components/ContainerMeasurements";
 import Header from "~/components/header/Entry";
 import MyCldImage from "~/components/image/MyCldImage";
+import SiteLayout from "~/components/layout/Site";
 import { calcImgHeightForWidth } from "~/helpers/transformation";
-import { type MyOmit } from "~/types/utilities";
+import { type Album } from "./_types";
 
-type RouterAlbum = RouterOutputs["album"]["albumsPageGetAll"][0];
-// albums query filters for cover image, but prisma doesn't give correct type. See issue [https://github.com/prisma/prisma/discussions/2772].
-type Album = MyOmit<RouterAlbum, "coverImage"> & {
-  coverImage: NonNullable<RouterAlbum["coverImage"]>;
-};
-
-const AlbumsPage = () => {
-  return (
-    <Layout>
+const AlbumsPage = () => (
+  <SiteLayout pageTitle="Albums - Piros Photography">
+    <PageLayout>
       <Titles />
       <div className="mt-8 md:mt-12">
         <Albums />
       </div>
-    </Layout>
-  );
-};
+    </PageLayout>
+  </SiteLayout>
+);
 
 export default AlbumsPage;
 
-const Layout = ({ children }: { children: ReactElement | ReactElement[] }) => {
-  return (
-    <div className="min-h-screen overflow-x-hidden">
-      <Header />
-      <div className="mt-20 flex justify-center md:mt-28">
-        <div className="w-full max-w-[1800px] p-4 xs:p-6 sm:p-8">
-          {children}
-        </div>
-      </div>
+const PageLayout = ({
+  children,
+}: {
+  children: ReactElement | ReactElement[];
+}) => (
+  <div className="min-h-screen overflow-x-hidden">
+    <Header />
+    <div className="mt-20 flex justify-center md:mt-28">
+      <div className="w-full max-w-[1800px] p-4 xs:p-6 sm:p-8">{children}</div>
     </div>
-  );
-};
+  </div>
+);
 
 const Titles = () => {
   const { data } = api.albumsPage.getText.useQuery(undefined, {
@@ -50,8 +45,13 @@ const Titles = () => {
 
   return (
     <div>
-      <h1 className="font-sans-secondary text-6xl font-light tracking-wide  md:text-7xl">
-        {pageText.title}
+      <h1 className="uppercase tracking-wider">
+        <span className="text-5xl md:text-6xl">
+          {pageText.title.slice(0, 1)}
+        </span>
+        <span className="text-4xl md:text-5xl">
+          {pageText.title?.slice(1, pageText.title.length)}
+        </span>
       </h1>
       {pageText.subTitle?.length ? (
         <h3 className="mt-3 max-w-[700px] font-serif-3 text-xl tracking-wide">
@@ -77,45 +77,38 @@ const Albums = () => {
   );
 };
 
-const Album = ({ album }: { album: Album }) => {
-  const [containerRef, { width: containerWidth }] =
-    useMeasure<HTMLDivElement>();
+const Album = ({ album }: { album: Album }) => (
+  <Link href={`/albums/${album.id}`} passHref>
+    <ContainerMeasurements>
+      {(containerMeasurements) => {
+        const height = calcImgHeightForWidth({
+          containerWidth: containerMeasurements.width,
+          image: {
+            naturalHeight: album.coverImage.naturalHeight,
+            naturalWidth: album.coverImage.naturalWidth,
+          },
+        });
 
-  return (
-    <Link href={`/albums/${album.id}`} passHref>
-      <div className="group/album" ref={containerRef}>
-        {containerWidth
-          ? [0].map((_, i) => {
-              const height = calcImgHeightForWidth({
-                containerWidth,
-                image: {
-                  naturalHeight: album.coverImage.naturalHeight,
-                  naturalWidth: album.coverImage.naturalWidth,
-                },
-              });
-
-              return (
-                <Fragment key={i}>
-                  <h1 className="font-sans-secondary uppercase tracking-wider">
-                    <span className="text-xl">{album.title?.slice(0, 1)}</span>
-                    <span className="text-lg">
-                      {album.title?.slice(1, album.title.length)}
-                    </span>
-                  </h1>
-                  <div className="mt-1" style={{ height }}>
-                    <MyCldImage
-                      dimensions={{
-                        height,
-                        width: containerWidth,
-                      }}
-                      src={album.coverImage.cloudinary_public_id}
-                    />
-                  </div>
-                </Fragment>
-              );
-            })
-          : null}
-      </div>
-    </Link>
-  );
-};
+        return (
+          <>
+            <h2 className="font-sans-secondary uppercase tracking-wider">
+              <span className="text-xl">{album.title?.slice(0, 1)}</span>
+              <span className="text-lg">
+                {album.title?.slice(1, album.title.length)}
+              </span>
+            </h2>
+            <div className="mt-1" style={{ height }}>
+              <MyCldImage
+                dimensions={{
+                  height,
+                  width: containerMeasurements.width,
+                }}
+                src={album.coverImage.cloudinary_public_id}
+              />
+            </div>
+          </>
+        );
+      }}
+    </ContainerMeasurements>
+  </Link>
+);

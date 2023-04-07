@@ -3,7 +3,7 @@ import Head from "next/head";
 
 const SiteLayout = ({
   children,
-  pageTitle,
+  pageTitle = "Piros Photography",
 }: {
   children: ReactElement;
   pageTitle?: string;
@@ -11,10 +11,10 @@ const SiteLayout = ({
   return (
     <>
       <Head>
-        <title>Piros Photography{pageTitle ? ` - ${pageTitle}` : ""}</title>
+        <title>{pageTitle}</title>
         <meta
           name="description"
-          content="Photography portfolio of Piroska Markus"
+          content="Beautiful photos from Piroska Markus"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>

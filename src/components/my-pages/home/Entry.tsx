@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactElement } from "react";
 import NextImage from "next/image";
 import Link from "next/link";
 
@@ -7,30 +7,30 @@ import { SpinnerIcon } from "~/components/icon";
 import SiteLayout from "~/components/layout/Site";
 import { localImage } from "~/assets/images";
 
-const HomePage = () => {
-  return (
-    <SiteLayout>
-      <>
-        <Header hideLogoAndUserMenuWhenClosed />
-        <PageContent />
-      </>
-    </SiteLayout>
-  );
-};
+const HomePage = () => (
+  <SiteLayout>
+    <PageLayout>
+      <MainImage />
+      <MainTitle />
+      <PageLinks />
+    </PageLayout>
+  </SiteLayout>
+);
 
 export default HomePage;
 
-const PageContent = () => {
-  return (
-    <div className={`flex justify-center`}>
-      <div className="relative h-[90vh] w-[80vw]">
-        <MainImage />
-        <MainTitle />
-        <PageLinks />
-      </div>
+const PageLayout = ({
+  children,
+}: {
+  children: ReactElement | ReactElement[];
+}) => (
+  <>
+    <Header hideLogo hideUserMenu />
+    <div className="flex justify-center">
+      <div className="relative h-[90vh] w-[80vw]">{children}</div>
     </div>
-  );
-};
+  </>
+);
 
 const MainImage = () => {
   const [minBlurImgIsLoaded, setMinBlurImgIsLoaded] = useState(false);
@@ -58,6 +58,7 @@ const MainImage = () => {
           loading="eager"
           quality={100}
           src={localImage.erith.blur.min}
+          sizes="90vw"
           alt=""
           onLoad={() => setMinBlurImgIsLoaded(true)}
         />
@@ -70,6 +71,7 @@ const MainImage = () => {
           loading="eager"
           quality={100}
           src={localImage.erith.blur.mid}
+          sizes="90vw"
           alt=""
           onLoad={() => setMidBlurImgIsLoaded(true)}
         />
@@ -80,6 +82,7 @@ const MainImage = () => {
           loading="eager"
           quality={100}
           src={localImage.erith.full}
+          sizes="80vw"
           alt=""
           onLoad={() => setQualityImgIsLoaded(true)}
         />
@@ -88,29 +91,23 @@ const MainImage = () => {
   );
 };
 
-const MainTitle = () => {
-  return (
-    <h1 className="absolute top-[35%] -left-[3vw] text-5xl font-medium tracking-wider xs:text-6xl xl:text-7xl 2xl:text-8xl">
-      Piros <br />
-      Photography
-    </h1>
-  );
-};
+const MainTitle = () => (
+  <h1 className="absolute top-[35%] -left-[3vw] text-5xl font-medium tracking-wider xs:text-6xl xl:text-7xl 2xl:text-8xl">
+    Piros <br />
+    Photography
+  </h1>
+);
 
-const PageLinks = () => {
-  return (
-    <div className="mt-2 flex items-center justify-end gap-6">
-      <PageLink href="/albums" text="Albums" />
-      <PageLink href="/videos" text="Videos" />
-      <PageLink href="/about" text="About" />
-    </div>
-  );
-};
+const PageLinks = () => (
+  <div className="mt-2 flex items-center justify-end gap-6">
+    <PageLink href="/albums" text="Albums" />
+    <PageLink href="/videos" text="Videos" />
+    <PageLink href="/about" text="About" />
+  </div>
+);
 
-const PageLink = ({ href, text }: { href: string; text: string }) => {
-  return (
-    <Link href={href} passHref>
-      <div className="uppercase">{text}</div>
-    </Link>
-  );
-};
+const PageLink = ({ href, text }: { href: string; text: string }) => (
+  <Link href={href} passHref>
+    <div className="uppercase">{text}</div>
+  </Link>
+);

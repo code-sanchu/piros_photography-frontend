@@ -6,10 +6,12 @@ import UserMenu from "./user/Entry";
 
 const Header = ({
   color = "black",
-  hideLogoAndUserMenuWhenClosed: isLanding,
+  hideLogo,
+  hideUserMenu,
 }: {
   color?: "black" | "white";
-  hideLogoAndUserMenuWhenClosed?: true;
+  hideLogo?: true;
+  hideUserMenu?: true;
 }) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
@@ -24,15 +26,15 @@ const Header = ({
     config: { tension: 280, friction: 60 },
     from: {
       color: color === "black" ? "black" : "white",
-      opacity: isLanding ? 0 : 1,
+      opacity: hideLogo ? 0 : 1,
     },
   }));
 
   const [userMenuSprings, userMenuSpringsApi] = useSpring(() => ({
     config: { tension: 280, friction: 60 },
     from: {
-      opacity: isLanding ? 0 : 1,
-      pointerEvents: isLanding ? "none" : "auto",
+      opacity: hideUserMenu ? 0 : 1,
+      pointerEvents: hideUserMenu ? "none" : "auto",
       color: color === "black" ? "gray" : "white",
     },
   }));
@@ -43,7 +45,7 @@ const Header = ({
         <Logo
           color={color}
           logoSprings={logoSprings}
-          disableLink={isLanding && !menuIsOpen}
+          disableLink={hideLogo && !menuIsOpen}
         />
         <HeaderRightSide
           color={color}
@@ -53,11 +55,11 @@ const Header = ({
             });
             logoSpringsApi.start({
               color: color === "black" ? "black" : "white",
-              opacity: isLanding ? 0 : 1,
+              opacity: hideLogo ? 0 : 1,
             });
             userMenuSpringsApi.start({
-              opacity: isLanding ? 0 : 1,
-              pointerEvents: isLanding ? "none" : "auto",
+              opacity: hideUserMenu ? 0 : 1,
+              pointerEvents: hideUserMenu ? "none" : "auto",
               color: color === "black" ? "gray" : "white",
             });
             setMenuIsOpen(false);
