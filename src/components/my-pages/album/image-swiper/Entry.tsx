@@ -4,13 +4,11 @@ import { useWindowSize } from "@react-hookz/web";
 import { animated, useSpring } from "@react-spring/web";
 
 import DetectSwipe from "~/components/DetectSwipe";
-import { CaretLeftIcon, CaretRightIcon } from "~/components/icon";
+import { CaretLeftIcon, CaretRightIcon, XCircleIcon } from "~/components/icon";
 import { calcImgHeightForWidth } from "~/helpers/transformation";
 import { type ImageSwiper } from "../Entry";
 import { AlbumImageProvider, useAlbumContext } from "../_context";
 import SwiperImage from "./swiper-image/Entry";
-
-// □ could make so no scroll to transition on open up swiper
 
 const ImagesSwiper = ({
   imageSwiper,
@@ -20,9 +18,7 @@ const ImagesSwiper = ({
   imageSwiper: ImageSwiper;
   setImageSwiper: (imageSwiper: ImageSwiper) => void;
   unopenedImageContainerWidth: number;
-  // isOpen: boolean
 }) => {
-  console.log("imageSwiper:", imageSwiper);
   const album = useAlbumContext();
 
   const windowSize = useWindowSize();
@@ -117,17 +113,20 @@ const ImagesSwiper = ({
 
         <TransitionChildFadeInOut>
           <button
-            className="fixed right-3 top-3 font-sans-secondary text-sm tracking-wide"
+            className="fixed right-3 top-3 flex items-center gap-1 font-sans-secondary text-sm tracking-wide text-gray-600 transition-colors duration-75 ease-in-out hover:text-gray-800"
             onClick={() => setImageSwiper({ ...imageSwiper, status: "closed" })}
             type="button"
           >
-            close
+            <span>close</span>
+            <span className="text-lg">
+              <XCircleIcon weight="bold" />
+            </span>
           </button>
         </TransitionChildFadeInOut>
 
         <TransitionChildFadeInOut>
           <CycleImgButton
-            icon={<CaretLeftIcon />}
+            icon={<CaretLeftIcon weight="light" />}
             onClick={showPreviousImg}
             xPosClass="left-0.5 sm:left-1 md:left-3"
           />
@@ -135,7 +134,7 @@ const ImagesSwiper = ({
 
         <TransitionChildFadeInOut>
           <CycleImgButton
-            icon={<CaretRightIcon />}
+            icon={<CaretRightIcon weight="light" />}
             onClick={showNextImg}
             xPosClass="right-0.5 sm:right-1 md:right-3"
           />

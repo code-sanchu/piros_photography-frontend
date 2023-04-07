@@ -72,14 +72,24 @@ const Albums = () => {
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
-      {albums.map((album) => (
-        <Album album={album} key={album.id}></Album>
+      {albums.map((album, i) => (
+        <Album
+          album={album}
+          loading={i === 0 ? "eager" : "lazy"}
+          key={album.id}
+        ></Album>
       ))}
     </div>
   );
 };
 
-const Album = ({ album }: { album: Album }) => (
+const Album = ({
+  album,
+  loading,
+}: {
+  album: Album;
+  loading: "lazy" | "eager";
+}) => (
   <Link href={`/albums/${album.id}`} passHref>
     <ContainerMeasurements>
       {(containerMeasurements) => {
@@ -106,6 +116,7 @@ const Album = ({ album }: { album: Album }) => (
                   width: containerMeasurements.width,
                 }}
                 src={album.coverImage.cloudinary_public_id}
+                loading={loading}
               />
             </div>
           </>

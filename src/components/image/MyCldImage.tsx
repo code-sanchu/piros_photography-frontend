@@ -6,9 +6,12 @@ import { SpinnerIcon } from "~/components/icon";
 const MyCldImage = ({
   src,
   dimensions,
+  loading,
 }: {
   src: string;
+
   dimensions: { width: number; height: number };
+  loading?: "lazy" | "eager";
 }) => {
   const [blurImgIsLoaded, setBlurImgIsLoaded] = useState(false);
   const [qualityImgIsLoaded, setQualityImgIsLoaded] = useState(false);
@@ -39,7 +42,7 @@ const MyCldImage = ({
           quality={1}
           alt=""
           onLoad={() => setBlurImgIsLoaded(true)}
-          loading="lazy"
+          loading={loading}
         />
         <CldImage
           className={`${!qualityImgIsLoaded ? "opacity-0" : "opacity-100"}`}
@@ -48,7 +51,7 @@ const MyCldImage = ({
           style={dimensions}
           alt=""
           onLoad={() => setQualityImgIsLoaded(true)}
-          loading="lazy"
+          loading={loading}
         />
       </div>
     </div>

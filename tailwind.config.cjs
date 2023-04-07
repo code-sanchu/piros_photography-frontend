@@ -22,6 +22,7 @@ const config = {
       fontFamily: {
         sans: ["var(--font-my-sans)", ...fontFamily.sans],
         ["sans-secondary"]: ["var(--font-my-sans-2)", ...fontFamily.sans],
+        ["sans-3"]: ["var(--font-my-sans-3)", ...fontFamily.sans],
         serif: ["var(--font-my-serif)", ...fontFamily.serif],
         ["serif-secondary"]: ["var(--font-my-serif-2)", ...fontFamily.serif],
         ["serif-3"]: ["var(--font-my-serif-3)", ...fontFamily.serif],

@@ -86,7 +86,7 @@ const CommentText = ({
       {isEditing ? (
         <UpdateCommentForm isEditing={isEditing} setIsEditing={setIsEditing} />
       ) : (
-        <p className="whitespace-pre-line font-serif text-base">
+        <p className="whitespace-pre-line font-sans-3 text-sm">
           {comment.text}
         </p>
       )}
@@ -139,7 +139,7 @@ const UpdateCommentForm = ({
   return (
     <div className="w-full" ref={containerRef}>
       <TextareaAutosize
-        className={`w-full resize-none border-b bg-transparent pb-2 font-serif  text-gray-900 transition-all duration-100 ease-in-out focus-within:border-b-gray-500 `}
+        className={`w-full resize-none border-b bg-transparent pb-2 font-sans-3 text-sm text-gray-900 transition-all duration-100 ease-in-out focus-within:border-b-gray-500 `}
         maxRows={2}
         value={value}
         onChange={(event) => setValue(event.target.value)}
@@ -312,19 +312,21 @@ const AdminMenu = () => {
         items={
           <div className="flex flex-col gap-4 rounded-lg py-6 px-2">
             <Menu.Item>
-              <AdminDeleteCommentModal
-                button={({ openModal }) => (
-                  <div
-                    className="group/item flex cursor-pointer items-center gap-5 rounded-md px-6 py-2 hover:bg-gray-200"
-                    onClick={openModal}
-                  >
-                    <span className="text-lg text-gray-700 transition-colors duration-75 ease-in-out group-hover/item:text-my-alert-content">
-                      <DeleteIcon />
-                    </span>
-                    <p className="text-sm text-gray-700">Delete Comment</p>
-                  </div>
-                )}
-              />
+              <div>
+                <AdminDeleteCommentModal
+                  button={({ openModal }) => (
+                    <div
+                      className="group/item flex cursor-pointer items-center gap-5 rounded-md px-6 py-2 hover:bg-gray-200"
+                      onClick={openModal}
+                    >
+                      <span className="text-lg text-gray-700 transition-colors duration-75 ease-in-out group-hover/item:text-my-alert-content">
+                        <DeleteIcon />
+                      </span>
+                      <p className="text-sm text-gray-700">Delete Comment</p>
+                    </div>
+                  )}
+                />
+              </div>
             </Menu.Item>
           </div>
         }

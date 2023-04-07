@@ -4,7 +4,7 @@ import MyCldImage from "~/components/image/MyCldImage";
 import { calcImgHeightForWidth } from "~/helpers/transformation";
 import { useAlbumImageContext } from "./_context";
 
-const Image = () => {
+const Image = ({ loading }: { loading: "eager" | "lazy" }) => {
   const albumImage = useAlbumImageContext();
 
   const [containerMeasurements, containerRef] = useMeasure<HTMLDivElement>();
@@ -30,6 +30,7 @@ const Image = () => {
               >
                 <OnContainerMeasurementsReady
                   height={height}
+                  loading={loading}
                   width={containerMeasurements.width}
                 />
               </div>
@@ -42,16 +43,22 @@ const Image = () => {
 
 export default Image;
 
-const OnContainerMeasurementsReady = (imageDimensions: {
+const OnContainerMeasurementsReady = ({
+  height,
+  loading,
+  width,
+}: {
   width: number;
   height: number;
+  loading: "eager" | "lazy";
 }) => {
   const albumImage = useAlbumImageContext();
 
   return (
     <MyCldImage
-      dimensions={imageDimensions}
+      dimensions={{ height, width }}
       src={albumImage.image.cloudinary_public_id}
+      loading={loading}
     />
   );
 };

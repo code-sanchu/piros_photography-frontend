@@ -18,6 +18,7 @@ import {
   UserCircleGear,
   Warning,
   WarningCircle,
+  XCircle,
 } from "@phosphor-icons/react";
 
 export {
@@ -40,4 +41,5 @@ export {
   CaretUp as CaretUpIcon,
   CaretRight as CaretRightIcon,
   CaretLeft as CaretLeftIcon,
+  XCircle as XCircleIcon,
 };

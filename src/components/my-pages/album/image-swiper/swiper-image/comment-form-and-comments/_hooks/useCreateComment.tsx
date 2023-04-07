@@ -10,10 +10,11 @@ export const useCreateComment = () => {
   // export const useCreateComment = ({onSubmit}: { onSubmit: OnSubmit }) => {
   const album = useAlbumContext();
 
-  const { refetch: refetchAlbum } = api.album.albumPageGetOne.useQuery(
-    { albumId: album.id },
-    { enabled: false },
-  );
+  const { refetch: refetchAlbum, isLoading } =
+    api.album.albumPageGetOne.useQuery(
+      { albumId: album.id },
+      { enabled: false },
+    );
 
   const createCommentMutation = api.albumImageComment.create.useMutation({
     async onSuccess() {
@@ -26,5 +27,5 @@ export const useCreateComment = () => {
     },
   });
 
-  return createCommentMutation.mutate;
+  return [createCommentMutation.mutate, { isLoading }];
 };

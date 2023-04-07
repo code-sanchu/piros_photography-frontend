@@ -5,6 +5,7 @@ import {
   Lora,
   Manrope,
   Merriweather,
+  Open_Sans,
 } from "next/font/google";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
@@ -42,6 +43,11 @@ const my_sans_2 = Fira_Sans({
   variable: "--font-my-sans-2",
 });
 
+const my_sans_3 = Open_Sans({
+  subsets: ["latin"],
+  variable: "--font-my-sans-3",
+});
+
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
@@ -56,6 +62,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
             --font-my-serif-3: ${my_serif_3.style.fontFamily};
             --font-my-sans: ${my_sans.style.fontFamily};
             --font-my-sans-2: ${my_sans_2.style.fontFamily};
+            --font-my-sans-3: ${my_sans_3.style.fontFamily};
           }
         `}
       </style>

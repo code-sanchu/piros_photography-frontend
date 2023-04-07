@@ -71,15 +71,18 @@ export type ImageSwiper = {
   status: "open" | "closed" | "opening";
   // status: "open" | "closed" | "opening" | "closing";
   index: number;
+  id: string;
 };
 
 const Images = () => {
+  const album = useAlbumContext();
+
   const [imageSwiper, setImageSwiper] = useState<ImageSwiper>({
     status: "closed",
     index: 0,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    id: album.images[0]!.id,
   });
-
-  const album = useAlbumContext();
 
   const [imageContainerMeasurements, imageContainerRef] =
     useMeasure<HTMLDivElement>();
@@ -91,10 +94,16 @@ const Images = () => {
           <AlbumImageProvider albumImage={albumImage} key={albumImage.id}>
             <div
               className="cursor-pointer"
-              onClick={() => setImageSwiper({ status: "opening", index: i })}
+              onClick={() =>
+                setImageSwiper({
+                  status: "opening",
+                  index: i,
+                  id: albumImage.id,
+                })
+              }
               ref={imageContainerRef}
             >
-              <Image />
+              <Image loading={i === 0 ? "eager" : "lazy"} />
             </div>
           </AlbumImageProvider>
         ))}
