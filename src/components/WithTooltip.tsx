@@ -18,9 +18,13 @@ export type Props = {
       };
   isDisabled?: boolean;
   type?: "info" | "action" | "extended-info";
+  enableForTouch?: true;
 };
 
 function isTouchDevice() {
+  if (typeof window === "undefined") {
+    return false;
+  }
   return (
     "ontouchstart" in window ||
     navigator.maxTouchPoints > 0 ||
@@ -37,11 +41,13 @@ const WithTooltip = ({
   isDisabled = false,
   yOffset = 10,
   type = "info",
+  enableForTouch,
 }: Props) => {
   const { getTooltipProps, setTooltipRef, setTriggerRef, visible } =
     usePopperTooltip({ delayShow: 500, placement, offset: [0, yOffset] });
 
-  const show = visible && !isDisabled && !isTouchDevice();
+  const disableForTouch = !enableForTouch && isTouchDevice();
+  const show = visible && !isDisabled && !disableForTouch;
 
   return (
     <>

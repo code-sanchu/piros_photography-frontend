@@ -237,7 +237,7 @@ const UserCommentMenu = ({
           </div>
         }
         styles={{
-          panel: "right-0 origin-top-right",
+          panel: "right-1 origin-top-right -top-1 -translate-y-full",
         }}
       />
     </div>

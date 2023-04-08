@@ -72,8 +72,15 @@ const Likes = () => {
     <div>
       <div className="flex items-center gap-2">
         <WithTooltip
-          text={!imgIsLikedByUser ? "clap" : "unclap"}
-          isDisabled={!session.data}
+          text={
+            session.status === "unauthenticated"
+              ? "sign in to react"
+              : !imgIsLikedByUser
+              ? "clap"
+              : "unclap"
+          }
+          // isDisabled={!session.data}
+          enableForTouch
         >
           <span
             className={`cursor-pointer text-xl transition-colors duration-75 ease-in-out hover:text-gray-700 ${

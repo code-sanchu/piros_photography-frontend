@@ -29,6 +29,7 @@ const config = {
       },
       screens: {
         xs: "510px",
+        landscape: { raw: "(min-aspect-ratio: 1/1)" },
       },
     },
   },

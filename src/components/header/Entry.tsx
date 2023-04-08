@@ -262,8 +262,8 @@ const SiteMenuPanel = ({
       className="fixed inset-0 z-20 bg-white p-8"
       style={{ ...panelSprings }}
     >
-      <div className="flex  justify-center">
-        <div className="mt-24 flex flex-col gap-12 md:mt-32 md:w-[80%] md:max-w-[1200px] md:flex-row md:items-center md:justify-between">
+      <div className="flex justify-center">
+        <div className="mt-16 flex flex-col gap-12 sm:mt-24 md:mt-32 md:max-w-[1200px] xs:mt-20 landscape:w-[80%] landscape:flex-row landscape:items-center landscape:justify-between">
           <PageLinks />
           <SocialLinks />
         </div>

@@ -2,6 +2,7 @@ import { Fragment, useEffect, type ReactElement } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useWindowSize } from "@react-hookz/web";
 import { animated, useSpring } from "@react-spring/web";
+import { signIn, useSession } from "next-auth/react";
 
 import DetectSwipe from "~/components/DetectSwipe";
 import { CaretLeftIcon, CaretRightIcon, XCircleIcon } from "~/components/icon";
@@ -54,12 +55,19 @@ const ImagesSwiper = ({
   }, [imageSwiper, windowSize.width]);
 
   const showNextImg = () => {
+    if (imageSwiper.index === album.images.length - 1) {
+      return;
+    }
+
     const nextIndex =
       imageSwiper.index !== album.images.length - 1 ? imageSwiper.index + 1 : 0;
     setImageSwiper({ ...imageSwiper, index: nextIndex });
   };
 
   const showPreviousImg = () => {
+    if (imageSwiper.index === 0) {
+      return;
+    }
     const prevIndex =
       imageSwiper.index !== 0 ? imageSwiper.index - 1 : album.images.length - 1;
     setImageSwiper({ ...imageSwiper, index: prevIndex });
@@ -112,16 +120,11 @@ const ImagesSwiper = ({
         </Transition.Child>
 
         <TransitionChildFadeInOut>
-          <button
-            className="fixed right-3 top-3 flex items-center gap-1 font-sans-secondary text-sm tracking-wide text-gray-600 transition-colors duration-75 ease-in-out hover:text-gray-800"
-            onClick={() => setImageSwiper({ ...imageSwiper, status: "closed" })}
-            type="button"
-          >
-            <span>close</span>
-            <span className="text-lg">
-              <XCircleIcon weight="bold" />
-            </span>
-          </button>
+          <TopButtons
+            closeModal={() =>
+              setImageSwiper({ ...imageSwiper, status: "closed" })
+            }
+          />
         </TransitionChildFadeInOut>
 
         <TransitionChildFadeInOut>
@@ -129,6 +132,7 @@ const ImagesSwiper = ({
             icon={<CaretLeftIcon weight="light" />}
             onClick={showPreviousImg}
             xPosClass="left-0.5 sm:left-1 md:left-3"
+            isDisabled={imageSwiper.index === 0}
           />
         </TransitionChildFadeInOut>
 
@@ -137,6 +141,7 @@ const ImagesSwiper = ({
             icon={<CaretRightIcon weight="light" />}
             onClick={showNextImg}
             xPosClass="right-0.5 sm:right-1 md:right-3"
+            isDisabled={imageSwiper.index === album.images.length - 1}
           />
         </TransitionChildFadeInOut>
       </Dialog>
@@ -146,18 +151,50 @@ const ImagesSwiper = ({
 
 export default ImagesSwiper;
 
+const TopButtons = ({ closeModal }: { closeModal: () => void }) => {
+  const session = useSession();
+
+  return (
+    <div className="fixed right-3 top-3 flex items-center gap-6">
+      {session.status === "unauthenticated" ? (
+        <button
+          className="text-sm tracking-wide text-blue-500 transition-colors duration-75 ease-in-out hover:text-blue-700"
+          onClick={() => void signIn()}
+          type="button"
+        >
+          Sign in
+        </button>
+      ) : null}
+      <button
+        className="flex items-center gap-1 text-sm tracking-wide text-gray-600 transition-colors duration-75 ease-in-out hover:text-gray-800"
+        onClick={closeModal}
+        type="button"
+      >
+        <span>close</span>
+        <span className="text-lg">
+          <XCircleIcon />
+        </span>
+      </button>
+    </div>
+  );
+};
+
 const CycleImgButton = ({
   icon,
   onClick,
   xPosClass,
+  isDisabled,
 }: {
   icon: ReactElement;
   onClick: () => void;
   xPosClass: string;
+  isDisabled: boolean;
 }) => {
   return (
     <button
-      className={`fixed top-1/2 z-40 inline-block -translate-y-1/2 text-3xl text-gray-400 transition-colors duration-75 ease-in-out hover:text-gray-600 ${xPosClass}`}
+      className={`fixed top-1/2 z-40 inline-block -translate-y-1/2 text-3xl text-gray-400 transition-all duration-75 ease-in-out hover:text-gray-600 ${xPosClass} ${
+        isDisabled ? "opacity-20" : "opacity-100"
+      }`}
       onClick={onClick}
       type="button"
     >
