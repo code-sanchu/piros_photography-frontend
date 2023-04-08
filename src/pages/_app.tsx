@@ -7,7 +7,6 @@ import {
   Merriweather,
   Open_Sans,
 } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { Slide, ToastContainer } from "react-toastify";
@@ -77,7 +76,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
         position="bottom-right"
         transition={Slide}
       />
-      <Analytics />
     </>
   );
 };
