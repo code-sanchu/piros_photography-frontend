@@ -18,7 +18,7 @@ export type Props = {
       };
   isDisabled?: boolean;
   type?: "info" | "action" | "extended-info";
-  enableForTouch?: true;
+  enableForTouch?: boolean;
 };
 
 function isTouchDevice() {

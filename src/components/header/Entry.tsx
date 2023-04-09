@@ -158,7 +158,7 @@ const SiteMenuButton = ({
   const [buttonTopBarSprings, buttonTopBarSpringApi] = useSpring(() => ({
     config: { tension: 280, friction: 60 },
     from: {
-      rotate: 0,
+      // rotate: 0,
       translateY: 0,
       backgroundColor: color,
     },
@@ -172,7 +172,7 @@ const SiteMenuButton = ({
   const [buttonBottomBarSprings, buttonBottomBarSpringApi] = useSpring(() => ({
     config: { tension: 280, friction: 60 },
     from: {
-      rotate: 0,
+      // rotate: 0,
       translateY: 0,
       backgroundColor: color,
     },
@@ -182,8 +182,8 @@ const SiteMenuButton = ({
     onOpen();
 
     buttonTopBarSpringApi.start({
-      rotate: 45,
-      translateY: 8,
+      // rotate: 45,
+      translateY: 6,
       backgroundColor: "black",
     });
 
@@ -192,8 +192,8 @@ const SiteMenuButton = ({
     });
 
     buttonBottomBarSpringApi.start({
-      rotate: -45,
-      translateY: -8,
+      // rotate: -45,
+      translateY: -6,
       backgroundColor: "black",
     });
 
@@ -204,7 +204,7 @@ const SiteMenuButton = ({
     onClose();
 
     buttonTopBarSpringApi.start({
-      rotate: 0,
+      // rotate: 0,
       translateY: 0,
       backgroundColor: color,
     });
@@ -214,7 +214,7 @@ const SiteMenuButton = ({
     });
 
     buttonBottomBarSpringApi.start({
-      rotate: 0,
+      // rotate: 0,
       translateY: 0,
       backgroundColor: color,
     });

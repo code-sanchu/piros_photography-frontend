@@ -79,8 +79,7 @@ const Likes = () => {
               ? "clap"
               : "unclap"
           }
-          // isDisabled={!session.data}
-          enableForTouch
+          enableForTouch={session.status === "unauthenticated"}
         >
           <span
             className={`cursor-pointer text-xl transition-colors duration-75 ease-in-out hover:text-gray-700 ${
