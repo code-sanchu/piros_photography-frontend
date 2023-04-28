@@ -36,6 +36,7 @@ model Session {
 enum Role {
   USER
   ADMIN
+  GUEST
 }
 
 enum UserStatus {

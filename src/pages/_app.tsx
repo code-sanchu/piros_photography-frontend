@@ -9,6 +9,7 @@ import {
 } from "next/font/google";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
+import { GoogleAnalytics } from "nextjs-google-analytics";
 import { Slide, ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -69,6 +70,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <SessionProvider session={session}>
         <Component {...pageProps} />
       </SessionProvider>
+      <GoogleAnalytics trackPageViews />
       <ToastContainer
         autoClose={2000}
         closeButton={false}
