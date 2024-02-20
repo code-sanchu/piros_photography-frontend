@@ -92,14 +92,20 @@ const MainImage = () => {
 };
 
 const MainTitle = () => (
-  <h1 className="absolute top-[35%] -left-[3vw] z-10 flex-shrink-0 text-4xl font-medium tracking-wider sm:text-6xl xl:text-7xl 2xl:text-8xl xs:text-5xl">
+  <h1
+    className="absolute top-[35%] -left-[3vw] z-10 flex-shrink-0 text-4xl font-medium tracking-wider sm:text-6xl xl:text-7xl 2xl:text-8xl xs:text-5xl"
+    data-testid="site-title-heading"
+  >
     Piros <br />
     Photography
   </h1>
 );
 
 const PageLinks = () => (
-  <div className="mt-2 flex items-center justify-end gap-4 text-sm tracking-wide sm:gap-6 xs:text-base">
+  <div
+    className="mt-2 flex items-center justify-end gap-4 text-sm tracking-wide sm:gap-6 xs:text-base"
+    data-testid="page-links"
+  >
     <PageLink href="/albums" text="Albums" />
     <PageLink href="/videos" text="Videos" />
     <PageLink href="/about" text="About" />
